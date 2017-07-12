@@ -62,6 +62,9 @@ NeuroscopeApp::NeuroscopeApp()
     ,prefDialog(0L)
     ,displayCount(0)
     ,mainDock(0)
+    //Cindy
+    ,freqDock(0)
+    //Cindy
     ,spikeChannelPalette(0)
     ,tabsParent(0L)
     ,paletteTabsParent(0L),
@@ -710,6 +713,17 @@ void NeuroscopeApp::applyPreferences() {
             }
             doc->setBackgroundColor(backgroundColor); //will take care of displays
         }
+        if(freqDock){
+            //loop on the palettes (if their are any skipped channels, their color are going to be updated to the new background color)
+            for(int i = 0; i < paletteTabsParent->count();++i){
+                QWidget* current1 = paletteTabsParent->widget(i);
+                if(qobject_cast<ChannelPalette*>(current1))
+                    static_cast<ChannelPalette*>(current1)->changeBackgroundColor(backgroundColor);
+                else if(qobject_cast<ItemPalette*>(current1))
+                    static_cast<ItemPalette*>(current1)->changeBackgroundColor(backgroundColor);
+            }
+            doc->setBackgroundColor(backgroundColor); //will take care of displays
+        }
     }
 
     if(displayPaletteHeaders != configuration().isPaletteHeadersDisplayed()){
@@ -764,6 +778,10 @@ void NeuroscopeApp::applyPreferences() {
         traceBackgroundImageDefault = configuration().getTraceBackgroundImage();
         doc->setDefaultTraceBackgroundImage(traceBackgroundImageDefault);
         if(!mainDock) doc->setTraceBackgroundImage(traceBackgroundImageDefault);
+        // Cindy
+        if(!freqDock) doc->setTraceBackgroundImage(traceBackgroundImageDefault);
+        // Cindy
+
     }
 
     if(videoSamplingRateDefault != configuration().getVideoSamplingRate() || videoWidthDefault != configuration().getWidth() ||
@@ -785,12 +803,18 @@ void NeuroscopeApp::applyPreferences() {
         initialOffsetDefault = configuration().getOffset();
         doc->setDefaultInitialOffset(initialOffsetDefault);
         if(!mainDock)doc->setInitialOffset(initialOffsetDefault);
+        // Cindy
+        if(!Dock)doc->setInitialOffset(initialOffsetDefault);
+        // Cindy
     }
 
     if(channelNbDefault != configuration().getNbChannels()){
         channelNbDefault = configuration().getNbChannels();
         doc->setDefaultChannelNb(channelNbDefault);
         if(!mainDock) doc->setChannelNb(channelNbDefault);
+        // Cindy
+        if(!freqDock) doc->setChannelNb(channelNbDefault);
+        // Cindy
     }
 
     if(datSamplingRateDefault != configuration().getDatSamplingRate()){
@@ -807,6 +831,9 @@ void NeuroscopeApp::applyPreferences() {
         resolutionDefault = configuration().getResolution();
         doc->setDefaultResolution(resolutionDefault);
         if(!mainDock)doc->setResolution(resolutionDefault);
+        // Cindy
+        if(!freqDock)doc->setResolution(resolutionDefault);
+        // Cindy
     }
 
     if(voltageRangeDefault != configuration().getVoltageRangeDefault()){
@@ -816,6 +843,9 @@ void NeuroscopeApp::applyPreferences() {
         if(screenGainDefault != configuration().getScreenGainDefault())
             doc->setDefaultGains(voltageRangeDefault,amplificationDefault,screenGainDefault);
         if(!mainDock)doc->setGains(voltageRangeDefault,amplificationDefault,screenGainDefault);
+        // Cindy
+        if(!freqDock)doc->setGains(voltageRangeDefault,amplificationDefault,screenGainDefault);
+        // Cindy
     }
 
     if(amplificationDefault != configuration().getAmplificationDefault()){
@@ -824,12 +854,18 @@ void NeuroscopeApp::applyPreferences() {
             screenGainDefault = configuration().getScreenGainDefault();
         doc->setDefaultGains(voltageRangeDefault,amplificationDefault,screenGainDefault);
         if(!mainDock)doc->setGains(voltageRangeDefault,amplificationDefault,screenGainDefault);
+        // Cindy
+        if(!freqDock)doc->setGains(voltageRangeDefault,amplificationDefault,screenGainDefault);
+        // Cindy
     }
 
     if(screenGainDefault != configuration().getScreenGainDefault()){
         screenGainDefault = configuration().getScreenGainDefault();
         doc->setDefaultGains(voltageRangeDefault,amplificationDefault,screenGainDefault);
         if(!mainDock)doc->setGains(voltageRangeDefault,amplificationDefault,screenGainDefault);
+        // Cindy
+        if(!freqDock)doc->setGains(voltageRangeDefault,amplificationDefault,screenGainDefault);
+        // Cindy
     }
 
     useWhiteColorDuringPrinting = configuration().getUseWhiteColorDuringPrinting();
@@ -901,6 +937,41 @@ void NeuroscopeApp::initDisplay(QList<int>* channelsToDisplay,bool autocenterCha
 
 
     tabsParent->addDockArea(view,tabLabel);
+
+    // Cindy
+    //Create the freqDock (first view)
+    
+    tabLabel = tr("Sounds");
+
+    isInit = false; //now a change in a spine box or the lineedit will trigger an update of the display
+
+    view = new NeuroscopeView(*this,tabLabel,startTime,duration,backgroundColor,Qt::WA_DeleteOnClose,statusBar(),channelsToDisplay,greyScale->isChecked(),
+                                              doc->tracesDataProvider(),displayMode->isChecked(),clusterVerticalLines->isChecked(),
+                                              clusterRaster->isChecked(),clusterWaveforms->isChecked(),showHideLabels->isChecked(),doc->getGain(),doc->getAcquisitionGain(),
+                                              doc->channelColors(),doc->getDisplayGroupsChannels(),doc->getDisplayChannelsGroups(),autocenterChannels,
+                                              offsets,channelGains,selectedChannels,skipStatus,rasterHeight,doc->getTraceBackgroundImage(),freqDock,"TracesDisplay");
+
+    view->installEventFilter(this);
+
+    connect(view,SIGNAL(channelsSelected(QList<int>)),this, SLOT(slotSelectChannelsInPalette(QList<int>)));
+    connect(view,SIGNAL(eventModified(QString,int,double,double)),this, SLOT(slotEventModified(QString,int,double,double)));
+    connect(view,SIGNAL(eventRemoved(QString,int,double)),this, SLOT(slotEventRemoved(QString,int,double)));
+    connect(view,SIGNAL(eventAdded(QString,QString,double)),this, SLOT(slotEventAdded(QString,QString,double)));
+    connect(view,SIGNAL(positionViewClosed()),this, SLOT(positionViewClosed()));
+     
+     /// Added by M.Zugaro to enable automatic forward paging
+     connect(view,SIGNAL(stopped()),this,SLOT(neuroscopeViewStopped()));
+
+    //Keep track of the number of displays
+    displayCount ++;
+
+    //Update the document's list of view
+    doc->addView(view);
+    freqDock = view;
+
+
+    tabsParent->addDockArea(view,tabLabel);
+    // Cindy
 
 
     //Initialize and dock the displayPanel
@@ -1483,6 +1554,9 @@ void NeuroscopeApp::slotFileClose(){
             displayChannelPalette->reset();
 
             mainDock = 0L;
+            // Cindy
+            freqDock = 0L;
+            // Cindy
             doc->closeDocument();
             resetState();
             QApplication::restoreOverrideCursor();
@@ -2477,6 +2551,9 @@ void NeuroscopeApp::slotDisplayClose(){
             //Delete the view
             delete tabsParent->currentWidget();
             mainDock = 0L;
+            // Cindy
+            freqDock = 0L;
+            // Cindy
 
             resetState();
             QApplication::restoreOverrideCursor();
@@ -2565,6 +2642,49 @@ void NeuroscopeApp::createDisplay(QList<int>* channelsToDisplay,bool verticalLin
         //Show the calibration bars if need it
         view->showCalibration(calibrationBar->isChecked(),false);
     }
+
+    // Cindy
+    if(freqDock){
+        if(tabLabel.isEmpty())
+            tabLabel = tr("Sounds");
+
+        view = new NeuroscopeView(*this,tabLabel,startTime,duration,backgroundColor,Qt::WA_DeleteOnClose,statusBar(),channelsToDisplay,
+                                                  greyMode,doc->tracesDataProvider(),multipleColumns,verticalLines,raster,waveforms,showLabels,
+                                                  doc->getGain(),doc->getAcquisitionGain(),doc->channelColors(),doc->getDisplayGroupsChannels(),doc->getDisplayChannelsGroups(),autocenterChannels,
+                                                  offsets,channelGains,selectedChannels,displayChannelPalette->getSkipStatus(),rasterHeight,doc->getTraceBackgroundImage(),freqDock,
+                                                  "TracesDisplay");
+
+        tabsParent->addDockArea(view,tabLabel);
+        view->installEventFilter(this);
+
+        connect(view,SIGNAL(channelsSelected(QList<int>)),this, SLOT(slotSelectChannelsInPalette(QList<int>)));
+        connect(view,SIGNAL(eventModified(QString,int,double,double)),this, SLOT(slotEventModified(QString,int,double,double)));
+        connect(view,SIGNAL(eventRemoved(QString,int,double)),this, SLOT(slotEventRemoved(QString,int,double)));
+        connect(view,SIGNAL(eventAdded(QString,QString,double)),this, SLOT(slotEventAdded(QString,QString,double)));
+        connect(view,SIGNAL(positionViewClosed()),this, SLOT(positionViewClosed()));
+          /// Added by M.Zugaro to enable automatic forward paging
+          connect(view,SIGNAL(stopped()),this,SLOT(neuroscopeViewStopped()));
+
+        view->installEventFilter(this);
+
+        //Update the document's list of view
+        doc->addView(view);
+
+        disconnect(tabsParent,0,0,0);
+
+        //Connect the change tab signal to slotTabChange(QWidget* widget) to trigger updates when
+        //the active display change.
+        connect(tabsParent, SIGNAL(currentChanged(int)), this, SLOT(slotTabChange(int)));
+
+        //Keep track of the number of displays
+        displayCount ++;
+
+
+        //Show the calibration bars if need it
+        view->showCalibration(calibrationBar->isChecked(),false);
+    }
+    // Cindy
+
 }
 
 void NeuroscopeApp::slotEditMode(){

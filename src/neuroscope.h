@@ -776,7 +776,7 @@ private:
     /** freqDock is the DockWidget. Inititalized in
      * initDisplay()
      */
-    // DockArea* freqDock;
+    DockArea* freqDock;
     //Cindy
 
     /**displayChannelPalette is the Widget containing the channel list used to specify the traces display.

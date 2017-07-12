@@ -76,19 +76,19 @@ NeuroscopeView::NeuroscopeView(NeuroscopeApp& mainWindow, const QString &label, 
     mainDock->setFocusPolicy(Qt::NoFocus);
 
     // Cindy
-    // Add additional mainDock
+    // Add additional freqDock
     freqDock = new QDockWidget(tr("Sound"));
     freqDock->setFeatures(QDockWidget::NoDockWidgetFeatures);
     addDockWidget(Qt::RightDockWidgetArea,freqDock);
 
     traceWidget = new TraceWidget(startTime,duration,greyScale,tracesProvider,multiColumns,verticalLines,raster,
                                   waveforms,labelsDisplay,*shownChannels,unitGain,acquisitionGain,channelColors,groupsChannels,channelsGroups,autocenterChannels,
-                                  channelOffsets,gains,skippedChannels,rasterHeight,QImage(backgroundImagePath),mainDock,"traces",backgroundColor,statusBar,5);
+                                  channelOffsets,gains,skippedChannels,rasterHeight,QImage(backgroundImagePath),freqDock,"traces",backgroundColor,statusBar,5);
      /// Added by M.Zugaro to enable automatic forward paging
     connect(traceWidget,SIGNAL(stopped()),this,SLOT(traceWidgetStopped()));
 
-    mainDock->setWidget(traceWidget);
-    mainDock->setFocusPolicy(Qt::NoFocus);
+    freqDock->setWidget(traceWidget);
+    freqDock->setFocusPolicy(Qt::NoFocus);
     //Cindy
 
     //Set Connection(s) common to all widgets.

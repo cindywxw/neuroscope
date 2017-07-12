@@ -795,7 +795,7 @@ private:
     /** freqDock. Inititalized in
   * the constructor.
   */
-    QDockWidget* mainDock;
+    QDockWidget* freqDock;
     //Cindy
 
     /**True if the traces are displayed on multiple columns, false otherwise.*/
