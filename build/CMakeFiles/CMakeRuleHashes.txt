@@ -1,0 +1,8 @@
+# Hashes of file build rules.
+0c71108077b3214b5bb9cdc7a9d3a927 src/CMakeFiles/neuroscope_automoc
+dad6a8d7d95f91606622d3a0faa10e68 src/qrc_neuroscope-icons.cxx
+fc4d601f123039b33d5adfd4476f33a2 src/ui_clusterpropertieslayout.h
+878b459e555967d910f554da14164f75 src/ui_positionpropertieslayout.h
+d59f7880b81824f013ba5371deea08c2 src/ui_prefdefaultslayout.h
+4d72b24df2ae023be9c8018c6c35866d src/ui_prefgenerallayout.h
+2251cf290d9ab4acefb14014a1eacdd8 src/ui_propertieslayout.h

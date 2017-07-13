@@ -1,0 +1,2 @@
+/home/cindy/Desktop/neuroscope/build/src/CMakeFiles/neuroscope.dir
+/home/cindy/Desktop/neuroscope/build/src/CMakeFiles/neuroscope_automoc.dir

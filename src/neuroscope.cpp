@@ -804,7 +804,7 @@ void NeuroscopeApp::applyPreferences() {
         doc->setDefaultInitialOffset(initialOffsetDefault);
         if(!mainDock)doc->setInitialOffset(initialOffsetDefault);
         // Cindy
-        if(!Dock)doc->setInitialOffset(initialOffsetDefault);
+        if(!freqDock)doc->setInitialOffset(initialOffsetDefault);
         // Cindy
     }
 
@@ -2605,7 +2605,7 @@ void NeuroscopeApp::createDisplay(QList<int>* channelsToDisplay,bool verticalLin
                                   QList<int> offsets,QList<int> channelGains,QList<int> selectedChannels,long startTime,long duration,int rasterHeight, QString tabLabel){
     if(mainDock){
         if(tabLabel.isEmpty())
-            tabLabel = tr("Field Potentials Display");
+            tabLabel = tr("Sounds");
 
         NeuroscopeView* view = new NeuroscopeView(*this,tabLabel,startTime,duration,backgroundColor,Qt::WA_DeleteOnClose,statusBar(),channelsToDisplay,
                                                   greyMode,doc->tracesDataProvider(),multipleColumns,verticalLines,raster,waveforms,showLabels,
@@ -2648,7 +2648,7 @@ void NeuroscopeApp::createDisplay(QList<int>* channelsToDisplay,bool verticalLin
         if(tabLabel.isEmpty())
             tabLabel = tr("Sounds");
 
-        view = new NeuroscopeView(*this,tabLabel,startTime,duration,backgroundColor,Qt::WA_DeleteOnClose,statusBar(),channelsToDisplay,
+        NeuroscopeView* view = new NeuroscopeView(*this,tabLabel,startTime,duration,backgroundColor,Qt::WA_DeleteOnClose,statusBar(),channelsToDisplay,
                                                   greyMode,doc->tracesDataProvider(),multipleColumns,verticalLines,raster,waveforms,showLabels,
                                                   doc->getGain(),doc->getAcquisitionGain(),doc->channelColors(),doc->getDisplayGroupsChannels(),doc->getDisplayChannelsGroups(),autocenterChannels,
                                                   offsets,channelGains,selectedChannels,displayChannelPalette->getSkipStatus(),rasterHeight,doc->getTraceBackgroundImage(),freqDock,
