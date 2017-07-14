@@ -1,21 +1,21 @@
 Determining if the Q_WS_WIN exist failed with the following output:
 Change Dir: /home/cindy/Desktop/neuroscope/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTryCompileExec2855814122/fast"
-/usr/bin/make -f CMakeFiles/cmTryCompileExec2855814122.dir/build.make CMakeFiles/cmTryCompileExec2855814122.dir/build
+Run Build Command:"/usr/bin/make" "cmTryCompileExec454138682/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec454138682.dir/build.make CMakeFiles/cmTryCompileExec454138682.dir/build
 make[1]: Entering directory '/home/cindy/Desktop/neuroscope/build/CMakeFiles/CMakeTmp'
 /usr/local/bin/cmake -E cmake_progress_report /home/cindy/Desktop/neuroscope/build/CMakeFiles/CMakeTmp/CMakeFiles 1
-Building CXX object CMakeFiles/cmTryCompileExec2855814122.dir/CheckSymbolExists.cxx.o
-/usr/bin/c++    -I/usr/include/qt4    -o CMakeFiles/cmTryCompileExec2855814122.dir/CheckSymbolExists.cxx.o -c /home/cindy/Desktop/neuroscope/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx
+Building CXX object CMakeFiles/cmTryCompileExec454138682.dir/CheckSymbolExists.cxx.o
+/usr/bin/c++    -I/usr/include/qt4    -o CMakeFiles/cmTryCompileExec454138682.dir/CheckSymbolExists.cxx.o -c /home/cindy/Desktop/neuroscope/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx
 /home/cindy/Desktop/neuroscope/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx: In function ‘int main(int, char**)’:
 /home/cindy/Desktop/neuroscope/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx:8:19: error: ‘Q_WS_WIN’ was not declared in this scope
    return ((int*)(&Q_WS_WIN))[argc];
                    ^
-CMakeFiles/cmTryCompileExec2855814122.dir/build.make:57: recipe for target 'CMakeFiles/cmTryCompileExec2855814122.dir/CheckSymbolExists.cxx.o' failed
+CMakeFiles/cmTryCompileExec454138682.dir/build.make:57: recipe for target 'CMakeFiles/cmTryCompileExec454138682.dir/CheckSymbolExists.cxx.o' failed
+make[1]: *** [CMakeFiles/cmTryCompileExec454138682.dir/CheckSymbolExists.cxx.o] Error 1
 make[1]: Leaving directory '/home/cindy/Desktop/neuroscope/build/CMakeFiles/CMakeTmp'
-make[1]: *** [CMakeFiles/cmTryCompileExec2855814122.dir/CheckSymbolExists.cxx.o] Error 1
-Makefile:118: recipe for target 'cmTryCompileExec2855814122/fast' failed
-make: *** [cmTryCompileExec2855814122/fast] Error 2
+Makefile:118: recipe for target 'cmTryCompileExec454138682/fast' failed
+make: *** [cmTryCompileExec454138682/fast] Error 2
 
 File /home/cindy/Desktop/neuroscope/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx:
 /* */
@@ -35,21 +35,21 @@ int main(int argc, char** argv)
 Determining if the Q_WS_QWS exist failed with the following output:
 Change Dir: /home/cindy/Desktop/neuroscope/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTryCompileExec3410585085/fast"
-/usr/bin/make -f CMakeFiles/cmTryCompileExec3410585085.dir/build.make CMakeFiles/cmTryCompileExec3410585085.dir/build
+Run Build Command:"/usr/bin/make" "cmTryCompileExec2570422079/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec2570422079.dir/build.make CMakeFiles/cmTryCompileExec2570422079.dir/build
 make[1]: Entering directory '/home/cindy/Desktop/neuroscope/build/CMakeFiles/CMakeTmp'
 /usr/local/bin/cmake -E cmake_progress_report /home/cindy/Desktop/neuroscope/build/CMakeFiles/CMakeTmp/CMakeFiles 1
-Building CXX object CMakeFiles/cmTryCompileExec3410585085.dir/CheckSymbolExists.cxx.o
-/usr/bin/c++    -I/usr/include/qt4    -o CMakeFiles/cmTryCompileExec3410585085.dir/CheckSymbolExists.cxx.o -c /home/cindy/Desktop/neuroscope/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx
+Building CXX object CMakeFiles/cmTryCompileExec2570422079.dir/CheckSymbolExists.cxx.o
+/usr/bin/c++    -I/usr/include/qt4    -o CMakeFiles/cmTryCompileExec2570422079.dir/CheckSymbolExists.cxx.o -c /home/cindy/Desktop/neuroscope/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx
 /home/cindy/Desktop/neuroscope/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx: In function ‘int main(int, char**)’:
 /home/cindy/Desktop/neuroscope/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx:8:19: error: ‘Q_WS_QWS’ was not declared in this scope
    return ((int*)(&Q_WS_QWS))[argc];
                    ^
-CMakeFiles/cmTryCompileExec3410585085.dir/build.make:57: recipe for target 'CMakeFiles/cmTryCompileExec3410585085.dir/CheckSymbolExists.cxx.o' failed
+CMakeFiles/cmTryCompileExec2570422079.dir/build.make:57: recipe for target 'CMakeFiles/cmTryCompileExec2570422079.dir/CheckSymbolExists.cxx.o' failed
 make[1]: Leaving directory '/home/cindy/Desktop/neuroscope/build/CMakeFiles/CMakeTmp'
-make[1]: *** [CMakeFiles/cmTryCompileExec3410585085.dir/CheckSymbolExists.cxx.o] Error 1
-Makefile:118: recipe for target 'cmTryCompileExec3410585085/fast' failed
-make: *** [cmTryCompileExec3410585085/fast] Error 2
+make[1]: *** [CMakeFiles/cmTryCompileExec2570422079.dir/CheckSymbolExists.cxx.o] Error 1
+Makefile:118: recipe for target 'cmTryCompileExec2570422079/fast' failed
+make: *** [cmTryCompileExec2570422079/fast] Error 2
 
 File /home/cindy/Desktop/neuroscope/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx:
 /* */
@@ -69,21 +69,21 @@ int main(int argc, char** argv)
 Determining if the Q_WS_MAC exist failed with the following output:
 Change Dir: /home/cindy/Desktop/neuroscope/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTryCompileExec2212220718/fast"
-/usr/bin/make -f CMakeFiles/cmTryCompileExec2212220718.dir/build.make CMakeFiles/cmTryCompileExec2212220718.dir/build
+Run Build Command:"/usr/bin/make" "cmTryCompileExec4229665885/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec4229665885.dir/build.make CMakeFiles/cmTryCompileExec4229665885.dir/build
 make[1]: Entering directory '/home/cindy/Desktop/neuroscope/build/CMakeFiles/CMakeTmp'
 /usr/local/bin/cmake -E cmake_progress_report /home/cindy/Desktop/neuroscope/build/CMakeFiles/CMakeTmp/CMakeFiles 1
-Building CXX object CMakeFiles/cmTryCompileExec2212220718.dir/CheckSymbolExists.cxx.o
-/usr/bin/c++    -I/usr/include/qt4    -o CMakeFiles/cmTryCompileExec2212220718.dir/CheckSymbolExists.cxx.o -c /home/cindy/Desktop/neuroscope/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx
+Building CXX object CMakeFiles/cmTryCompileExec4229665885.dir/CheckSymbolExists.cxx.o
+/usr/bin/c++    -I/usr/include/qt4    -o CMakeFiles/cmTryCompileExec4229665885.dir/CheckSymbolExists.cxx.o -c /home/cindy/Desktop/neuroscope/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx
 /home/cindy/Desktop/neuroscope/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx: In function ‘int main(int, char**)’:
 /home/cindy/Desktop/neuroscope/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx:8:19: error: ‘Q_WS_MAC’ was not declared in this scope
    return ((int*)(&Q_WS_MAC))[argc];
                    ^
-CMakeFiles/cmTryCompileExec2212220718.dir/build.make:57: recipe for target 'CMakeFiles/cmTryCompileExec2212220718.dir/CheckSymbolExists.cxx.o' failed
+CMakeFiles/cmTryCompileExec4229665885.dir/build.make:57: recipe for target 'CMakeFiles/cmTryCompileExec4229665885.dir/CheckSymbolExists.cxx.o' failed
 make[1]: Leaving directory '/home/cindy/Desktop/neuroscope/build/CMakeFiles/CMakeTmp'
-make[1]: *** [CMakeFiles/cmTryCompileExec2212220718.dir/CheckSymbolExists.cxx.o] Error 1
-Makefile:118: recipe for target 'cmTryCompileExec2212220718/fast' failed
-make: *** [cmTryCompileExec2212220718/fast] Error 2
+make[1]: *** [CMakeFiles/cmTryCompileExec4229665885.dir/CheckSymbolExists.cxx.o] Error 1
+Makefile:118: recipe for target 'cmTryCompileExec4229665885/fast' failed
+make: *** [cmTryCompileExec4229665885/fast] Error 2
 
 File /home/cindy/Desktop/neuroscope/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx:
 /* */

@@ -62,7 +62,7 @@ NeuroscopeView::NeuroscopeView(NeuroscopeApp& mainWindow, const QString &label, 
     for(iterator = skipStatus.begin(); iterator != skipStatus.end(); ++iterator) if(iterator.value()) skippedChannels.append(iterator.key());
 
     //Create the mainDock
-    mainDock = new QDockWidget(tr("Sounds"));
+    mainDock = new QDockWidget(tr("field potentials"));
     mainDock->setFeatures(QDockWidget::NoDockWidgetFeatures);
     addDockWidget(Qt::RightDockWidgetArea,mainDock);
 
@@ -143,7 +143,7 @@ NeuroscopeView::NeuroscopeView(NeuroscopeApp& mainWindow, const QString &label, 
 
     // Cindy
     // Add additional freqDock
-    freqDock = new QDockWidget(tr("Sound"));
+    freqDock = new QDockWidget(tr("field potentials"));
     freqDock->setFeatures(QDockWidget::NoDockWidgetFeatures);
     addDockWidget(Qt::RightDockWidgetArea,freqDock);
 
