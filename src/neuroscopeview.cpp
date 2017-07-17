@@ -142,8 +142,8 @@ NeuroscopeView::NeuroscopeView(NeuroscopeApp& mainWindow, const QString &label, 
     connect(&globalEventProvider,SIGNAL(getCurrentEventInformation(long,long,QObject*)),traceWidget,SLOT(getCurrentEventInformation(long,long,QObject*)));
 
     // Cindy
-    Add additional freqDock
-    freqDock = new QDockWidget(tr("sound"));
+    // Add additional freqDock below mainDock
+    freqDock = new QDockWidget(tr("Sounds"));
     freqDock->setFeatures(QDockWidget::NoDockWidgetFeatures);
     addDockWidget(Qt::RightDockWidgetArea,freqDock);
 

@@ -941,36 +941,36 @@ void NeuroscopeApp::initDisplay(QList<int>* channelsToDisplay,bool autocenterCha
     // Cindy
     //Create the freqDock (first view)
     
-    tabLabel = tr("Sounds");
+    // tabLabel = tr("Sounds");
 
-    isInit = false; //now a change in a spine box or the lineedit will trigger an update of the display
+    // isInit = false; //now a change in a spine box or the lineedit will trigger an update of the display
 
-    view = new NeuroscopeView(*this,tabLabel,startTime,duration,backgroundColor,Qt::WA_DeleteOnClose,statusBar(),channelsToDisplay,greyScale->isChecked(),
-                                              doc->tracesDataProvider(),displayMode->isChecked(),clusterVerticalLines->isChecked(),
-                                              clusterRaster->isChecked(),clusterWaveforms->isChecked(),showHideLabels->isChecked(),doc->getGain(),doc->getAcquisitionGain(),
-                                              doc->channelColors(),doc->getDisplayGroupsChannels(),doc->getDisplayChannelsGroups(),autocenterChannels,
-                                              offsets,channelGains,selectedChannels,skipStatus,rasterHeight,doc->getTraceBackgroundImage(),freqDock,"TracesDisplay");
+    // view = new NeuroscopeView(*this,tabLabel,startTime,duration,backgroundColor,Qt::WA_DeleteOnClose,statusBar(),channelsToDisplay,greyScale->isChecked(),
+    //                                           doc->tracesDataProvider(),displayMode->isChecked(),clusterVerticalLines->isChecked(),
+    //                                           clusterRaster->isChecked(),clusterWaveforms->isChecked(),showHideLabels->isChecked(),doc->getGain(),doc->getAcquisitionGain(),
+    //                                           doc->channelColors(),doc->getDisplayGroupsChannels(),doc->getDisplayChannelsGroups(),autocenterChannels,
+    //                                           offsets,channelGains,selectedChannels,skipStatus,rasterHeight,doc->getTraceBackgroundImage(),freqDock,"TracesDisplay");
 
-    view->installEventFilter(this);
+    // view->installEventFilter(this);
 
-    connect(view,SIGNAL(channelsSelected(QList<int>)),this, SLOT(slotSelectChannelsInPalette(QList<int>)));
-    connect(view,SIGNAL(eventModified(QString,int,double,double)),this, SLOT(slotEventModified(QString,int,double,double)));
-    connect(view,SIGNAL(eventRemoved(QString,int,double)),this, SLOT(slotEventRemoved(QString,int,double)));
-    connect(view,SIGNAL(eventAdded(QString,QString,double)),this, SLOT(slotEventAdded(QString,QString,double)));
-    connect(view,SIGNAL(positionViewClosed()),this, SLOT(positionViewClosed()));
+    // connect(view,SIGNAL(channelsSelected(QList<int>)),this, SLOT(slotSelectChannelsInPalette(QList<int>)));
+    // connect(view,SIGNAL(eventModified(QString,int,double,double)),this, SLOT(slotEventModified(QString,int,double,double)));
+    // connect(view,SIGNAL(eventRemoved(QString,int,double)),this, SLOT(slotEventRemoved(QString,int,double)));
+    // connect(view,SIGNAL(eventAdded(QString,QString,double)),this, SLOT(slotEventAdded(QString,QString,double)));
+    // connect(view,SIGNAL(positionViewClosed()),this, SLOT(positionViewClosed()));
      
-     /// Added by M.Zugaro to enable automatic forward paging
-     connect(view,SIGNAL(stopped()),this,SLOT(neuroscopeViewStopped()));
+    //  /// Added by M.Zugaro to enable automatic forward paging
+    //  connect(view,SIGNAL(stopped()),this,SLOT(neuroscopeViewStopped()));
 
-    //Keep track of the number of displays
-    displayCount ++;
+    // //Keep track of the number of displays
+    // displayCount ++;
 
-    //Update the document's list of view
-    doc->addView(view);
-    freqDock = view;
+    // //Update the document's list of view
+    // doc->addView(view);
+    // freqDock = view;
 
 
-    tabsParent->addDockArea(view,tabLabel);
+    // tabsParent->addDockArea(view,tabLabel);
     // Cindy
 
 
