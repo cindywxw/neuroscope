@@ -15,6 +15,20 @@
  *                                                                         *
  ***************************************************************************/
 
+
+// Cindy
+// #ifdef __cplusplus
+// extern "C" {
+// #include <stdio.h>
+// #include <math.h>
+// }
+// #endif
+// #include <cstdio>
+#include <cstdlib>
+#include <cmath>
+#include "tfr.h"
+// Cindy
+
 // include files for Qt
 #include <QPainter>
 
@@ -29,6 +43,9 @@
 #include "neuroscope.h"
 #include "tracewidget.h"
 
+// Cindy
+// using namespace std;
+// CIndy
 
 class EventData;
 
@@ -143,9 +160,11 @@ NeuroscopeView::NeuroscopeView(NeuroscopeApp& mainWindow, const QString &label, 
 
     // Cindy
     // Add additional freqDock below mainDock
-    freqDock = new QDockWidget(tr("Sounds"));
+    freqDock = new QDockWidget(tr("TFR Spectrogram"));
     freqDock->setFeatures(QDockWidget::NoDockWidgetFeatures);
     addDockWidget(Qt::RightDockWidgetArea,freqDock);
+
+
 
     traceWidget = new TraceWidget(startTime,duration,greyScale,tracesProvider,multiColumns,verticalLines,raster,
                                   waveforms,labelsDisplay,*shownChannels,unitGain,acquisitionGain,channelColors,groupsChannels,channelsGroups,autocenterChannels,
@@ -227,6 +246,12 @@ NeuroscopeView::~NeuroscopeView()
     delete shownChannels;
 }
 
+
+// Cindy
+// void NeuroscopeView::spectrogram_click {
+
+// }
+// Cindy
 
 void NeuroscopeView::print(QPrinter* printer,const QString& filePath,bool whiteBackground)
 {
@@ -650,3 +675,11 @@ void NeuroscopeView::removeEvent(){
 void NeuroscopeView::slotEventAdded(const QString &providerName, const QString &addedEventDescription,double time){
     emit eventAdded(providerName,addedEventDescription,time);
 }
+
+
+// Cindy
+// #ifdef __cplusplus
+// }
+// #endif
+
+// #endif

@@ -52,7 +52,7 @@ set(CMAKE_DEPENDS_CHECK_CXX
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
 # Preprocessor definitions for this target.
-set(CMAKE_TARGET_DEFINITIONS
+set(CMAKE_TARGET_DEFINITIONS_CXX
   "QT_CORE_LIB"
   "QT_GUI_LIB"
   "QT_NO_DEBUG"
@@ -60,12 +60,8 @@ set(CMAKE_TARGET_DEFINITIONS
   "QT_USE_FAST_OPERATOR_PLUS"
   )
 
-# Targets to which this target links.
-set(CMAKE_TARGET_LINKED_INFO_FILES
-  )
-
 # The include file search paths:
-set(CMAKE_C_TARGET_INCLUDE_PATH
+set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "src"
   "../src"
   "/usr/include/qt4"
@@ -80,6 +76,7 @@ set(CMAKE_C_TARGET_INCLUDE_PATH
   "/usr/include/qt4/QtOpenGL"
   "/usr/include/qt4/QtNetwork"
   "/usr/include/qt4/QtXmlPatterns"
+  "/usr/include/qt4/QtWebKit"
   "/usr/include/qt4/QtHelp"
   "/usr/include/qt4/QtUiTools"
   "/usr/include/qt4/QtTest"
@@ -90,6 +87,10 @@ set(CMAKE_C_TARGET_INCLUDE_PATH
   "."
   "/usr/include/klustersshared"
   )
-set(CMAKE_CXX_TARGET_INCLUDE_PATH ${CMAKE_C_TARGET_INCLUDE_PATH})
-set(CMAKE_Fortran_TARGET_INCLUDE_PATH ${CMAKE_C_TARGET_INCLUDE_PATH})
-set(CMAKE_ASM_TARGET_INCLUDE_PATH ${CMAKE_C_TARGET_INCLUDE_PATH})
+
+# Targets to which this target links.
+set(CMAKE_TARGET_LINKED_INFO_FILES
+  )
+
+# Fortran module output directory.
+set(CMAKE_Fortran_TARGET_MODULE_DIR "")

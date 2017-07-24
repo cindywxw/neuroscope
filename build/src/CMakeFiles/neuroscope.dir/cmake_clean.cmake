@@ -1,5 +1,6 @@
 file(REMOVE_RECURSE
   "neuroscope_automoc.cpp"
+  "tfr_automoc.cpp"
   "qrc_neuroscope-icons.cxx"
   "ui_propertieslayout.h"
   "ui_prefdefaultslayout.h"

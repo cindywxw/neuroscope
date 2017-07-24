@@ -40,6 +40,9 @@
 #include <QStatusBar>
 #include <QToolBar>
 
+// Cindy
+#include <QRadioButton>
+// Cindy
 
 #include <QProcess>
 #include <QSplitter>
@@ -900,7 +903,7 @@ void NeuroscopeApp::initializePreferences(){
 
 void NeuroscopeApp::initDisplay(QList<int>* channelsToDisplay,bool autocenterChannels,QList<int> offsets,
 										  QList<int> channelGains,QList<int> selectedChannels,QMap<int,bool>& skipStatus,
-										  int rasterHeight,long duration,long startTime,QString tabLabel)
+										  int rasterHeight,long duration,long startTime,QString tabLabel /*,QRadioButton radButton*/) //radButton added Cindy
 {
     isInit = true; //prevent the spine boxes or the lineedit and the editline to trigger during initialisation
     //Initialize the spinboxe and scrollbar
@@ -908,6 +911,9 @@ void NeuroscopeApp::initDisplay(QList<int>* channelsToDisplay,bool autocenterCha
     //Create the mainDock (first view)
     if(tabLabel.isEmpty())
         tabLabel = tr("Field Potentials Display");
+    // Cindy
+    // radButton = new QRadioButton("Show the spectrogram", this);
+    // Cindy
 
     isInit = false; //now a change in a spine box or the lineedit will trigger an update of the display
 

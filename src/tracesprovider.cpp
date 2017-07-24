@@ -19,6 +19,14 @@
 //#define _LARGEFILE_SOURCE already defined in /usr/include/features.h
 #define _FILE_OFFSET_BITS 64
 
+// Cindy
+#include <cstdlib>
+#include <cmath>
+#include "tfr.h"
+//temporary
+#include <stdlib.h>
+#include <stdio.h>
+// Cindy
 
 //include files for the application
 #include "tracesprovider.h"
@@ -27,6 +35,24 @@
 #include <QRegExp>
 #include <QDebug>
 #include <QFileInfo>
+
+/* output a tab-delimited file */
+void
+write_file(char const * fn, double *buf, int nrow, int ncol)
+{
+        FILE *fp = fopen(fn, "wt");
+        for (int i = 0; i < nrow; ++i) {
+                for (int j = 0; j+1 < ncol; ++j) {
+                        fprintf(fp, "%3.4f\t", *buf);
+                        ++buf;
+                }
+                fprintf(fp, "%.6g\n", *buf);
+                ++buf;
+        }
+        fclose(fp);
+}
+
+
 
 TracesProvider::TracesProvider(const QString& fileUrl,int nbChannels,int resolution,double samplingRate,int offset)
     : DataProvider(fileUrl),
@@ -79,6 +105,12 @@ void TracesProvider::requestData(long startTime,long endTime,QObject* initiator,
 void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator,long startTimeInRecordingUnits)
 {
     Array<dataType> data;
+    // Cindy
+    // to store the spectrogram data
+    Array<dataType> specdata;
+
+    // Cindy
+
     //When the bug in gcc will be corrected for the 64 bits, the c++ code will be use
     //[alex@slut]/home/alex/src/sizetest > ./sizetest-2.95.3
     //  sizeof(std::streamoff) = 8 bytes (64 bits)
@@ -119,6 +151,21 @@ void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator
 
     //data will contain the final values.
     data.setSize(nbSamples,nbChannels);
+    
+    // Cindy
+    specdata.setSize(nbSamples,nbChannels);
+    double **transdata;
+    transdata = new double *[nbChannels];
+    for(int i = 0; i < nbChannels; i++) {
+        transdata[i] = new double[nbSamples];
+    }
+
+    // to clean up
+    // for(int i = 0; i < nbChannels; i++) {
+    //     delete [] transdata[i];
+    // }
+    // delete [] transdata;
+    // Cindy
 
     //Depending on the acquisition system resolution, the data are store as short or long
     if((resolution == 12) | (resolution == 14) | (resolution == 16)){
@@ -176,6 +223,11 @@ void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator
                 {
                     // Emit the signal with an empty array, let the receiver handle the error (user message).
                     data.setSize(0,0);
+
+                    // Cindy
+                    specdata.setSize(0,0);
+                    // Cindy
+
                     emit dataReady(data,initiator);
                     return;
                 }
@@ -245,6 +297,11 @@ void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator
             QFile dataFile(fileName);
             if (!dataFile.open(QIODevice::ReadOnly)) {
                 data.setSize(0,0);
+
+                // Cindy
+                specdata.setSize(0,0);
+                // Cindy
+
                 emit dataReady(data,initiator);
                 return;
             }
@@ -258,6 +315,11 @@ void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator
             if(nbRead != qint64(nbValues*sizeof(short))){
                 //emit the signal with an empty array, the reciever will take care of it, given a message to the user.
                 data.setSize(0,0);
+
+                // Cindy
+                specdata.setSize(0,0);
+                // Cindy
+
                 dataFile.close();
                 emit dataReady(data,initiator);
                 return;
@@ -268,11 +330,25 @@ void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator
         if(offset != 0){
             for(qint64 i = 0; i < nbValues; ++i){
                 data[i] = static_cast<dataType>(retrieveData[i]) - static_cast<dataType>(offset);
+                // Cindy
+                specdata[i] = static_cast<dataType>(retrieveData[i]) - static_cast<dataType>(offset);
+                // transdata
+                int row = nbValues/nbSamples;
+                int column = nbValues - row*nbSamples;
+                transdata[row][column] = static_cast<double>(retrieveData[i]) - static_cast<double>(offset);
+                // Cindy
             }
         } else {
 
             for(qint64 i = 0; i < nbValues; ++i){
                 data[i] = static_cast<dataType>(retrieveData[i]);
+                // Cindy
+                specdata[i] = static_cast<dataType>(retrieveData[i]);
+                // transdata
+                int row = nbValues/nbSamples;
+                int column = nbValues - row*nbSamples;
+                transdata[row][column] = static_cast<double>(retrieveData[i]);
+                // Cindy
             }
         }
     } else if(resolution == 32) {
@@ -280,6 +356,10 @@ void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator
         QFile dataFile(fileName);
         if (!dataFile.open(QIODevice::ReadOnly)) {
             data.setSize(0,0);
+
+            // Cindy
+            specdata.setSize(0,0);
+            // Cindy
             emit dataReady(data,initiator);
             return;
         }
@@ -294,24 +374,79 @@ void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator
         if(nbRead != qint64(nbValues*sizeof(short))){
             //emit the signal with an empty array, the reciever will take care of it, given a message to the user.
             data.setSize(0,0);
+
+            // Cindy
+            specdata.setSize(0,0);
+            // Cindy
+
             dataFile.close();
             emit dataReady(data,initiator);
             return;
         }
         //Apply the offset if need it and store the values in data.
         if(offset != 0){
-            for(qint64 i = 0; i < nbValues; ++i)
+            for(qint64 i = 0; i < nbValues; ++i) {
                 data[i] = retrieveData[i] - static_cast<dataType>(offset);
+                // Cindy
+                specdata[i] = retrieveData[i] - static_cast<dataType>(offset);
+                // transdata
+                int row = nbValues/nbSamples;
+                int column = nbValues - row*nbSamples;
+                transdata[row][column] = static_cast<double>(retrieveData[i]) - static_cast<double>(offset);
+                // Cindy
+            }
         }
         else{
             for(qint64 i = 0; i < nbValues; ++i){
                 data[i] = static_cast<dataType>(retrieveData[i]);
+
+                // Cindy
+                specdata[i] = static_cast<dataType>(retrieveData[i]);
+                // transdata
+                int row = nbValues/nbSamples;
+                int column = nbValues - row*nbSamples;
+                transdata[row][column] = static_cast<double>(retrieveData[i]);
+                // Cindy
             }
         }
         //The data have been retrieve, close the file.
         dataFile.close();
     }
 
+
+
+    // Cindy
+    mfft *mtmh;
+    int npoints = 17590;
+    int N = 256;
+    int Np = 201;
+    double NW = 3.5;
+    int step = 10;
+    int k = 6;
+    double tm = 6.0;
+    double psd[N];
+    double *specgram;
+    double sigpow;
+    int row = sizeof transdata / sizeof transdata[0];
+    const int l = (npoints - Np + 1) / step;
+
+    mtmh = mtm_init_dpss(N, N, NW, (int)(NW*2-1));
+    for (int i = 0; i < row; i++) {
+        sigpow = mtfft(mtmh, transdata[i], N);
+        mtpower(mtmh, psd, sigpow);
+        // free(psd);
+        specgram = new double[l*(N/2+1)];
+        printf("* MTM spectrogram to tfr_out_mtm\n");
+        mtm_spec(mtmh, specgram, transdata[i], npoints, step, 1);
+    }
+    // sigpow = mtfft(mtmh, transdata, N);
+    // mtpower(mtmh, psd, sigpow);
+    free(psd);
+    // const int l = (npoints - Np + 1) / step;
+    // printf("* MTM spectrogram to tfr_out_mtm\n");
+    // mtm_spec(mtmh, specgram, (double*) transdata, npoints, step, 1);
+    write_file("tfr_out_tfr.dat", specgram, l, (N/2+1));
+    // Cindy
 
     //Send the information to the receiver.
     emit dataReady(data,initiator);
