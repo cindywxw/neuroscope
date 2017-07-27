@@ -352,5 +352,45 @@ if(UNIX)
     endif()
   endif()
 endif()
+
+# Cindy
+#find_package(libtfr REQUIRED)
+#if( NOT libtfr_FOUND ) 
+#  message( FATAL_ERROR "Cannot find libtfr!" ) 
+#endif( NOT libtfr_FOUND )
+#message( STATUS "libtfr found")
+
+# include_directories("/usr/local/include" "/usr/local/lib")
+# link_directories("/usr/local/include" "/usr/local/lib")
+#find_library(TFR_LIB tfr /usr/local/lib)
+#add_library(${TFR_LIB} SHARED)
+#install(TARGETS ${TFR_LIB} DESTINATION lib)
+#install(FILES tfr.h DESTINATION include)
+# add_library(libtfr SHARED [GLOBAL])
+# add_executable (libtfr libtfr.cxx)
+# target_link_libraries(neuroscope ${TFR_LIB})
+# Cindy
+
+# Cindy
+# target_link_libraries(neuroscope ${TFR_LIB})
+# set_target_properties(neuroscope PROPERTIES LINKER_LANGUAGE CXX)
+# Cindy
+
 include(CPack)
 
+# Cindy
+#include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src) 
+#set(SOURCE_EXE src/main.cpp)
+#add_executable(main ${SOURCE_EXE})
+#include_directories("/usr/local/include")
+#include_directories("/usr/local/lib")
+#add_library(tfr SHARED IMPORTED)
+#set_property(TARGET tfr PROPERTY IMPORTED_LOCATION /usr/local/lib/libtfr.so)
+#target_link_libraries(main tfr)
+
+#include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
+#set (TFR_LIBS libtfr/tfr.h libtfr/mtm_impl.h)
+#set (TFR_SRCS libtfr/tfr.c libtfr/mtm.c)
+#add_library(tfr ${TFR_SRCS} ${TFR_LIBS})
+#target_link_libraries(tracesprovider.cpp)
+# Cindy

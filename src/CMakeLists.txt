@@ -44,9 +44,6 @@ set(neuroscope_SRCS
 	propertieslayout.cpp
 	)
 	
-include_directories("/usr/local/include/")
-add_library(tfr tfr.c mtm.c)
-target_link_libraries (tfr)
 
 qt4_add_resources(neuroscope_SRCS neuroscope-icons.qrc)
 
