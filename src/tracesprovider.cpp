@@ -20,12 +20,15 @@
 #define _FILE_OFFSET_BITS 64
 
 // Cindy
-#include <cstdlib>
-#include <cmath>
-#include "tfr.h"
+// #include <cstdlib>
+// #include <cmath>
+// #include "tfr.h"
+// extern "C" {
+// #include "tfr.h"    
+// }
 //temporary
-#include <stdlib.h>
-#include <stdio.h>
+// #include <stdlib.h>
+// #include <stdio.h>
 // Cindy
 
 //include files for the application
@@ -35,6 +38,30 @@
 #include <QRegExp>
 #include <QDebug>
 #include <QFileInfo>
+// Cindy
+// #include "Gist.h"
+// Cindy
+
+// Cindy
+// #ifdef __cplusplus
+// extern "C"{
+// #endif
+//     struct mfft_s;
+//     typedef struct mfft_s mfft;
+//     mfft * mtm_init_dpss(int nfft, int npoints, double nw, int ntapers);
+//     double mtfft(mfft *, double const *, int);
+//     void mtpower(mfft const *, double *, double);
+//     void mtm_spec(mfft *, double *, const double *, int, int, int);
+// #ifdef __cplusplus
+// }
+// #endif
+
+// typedef struct mfft_s mfft;
+// extern mfft * mtm_init_dpss(int nfft, int npoints, double nw, int ntapers);
+// extern double mtfft(mfft * mtm, double const * data, int nbins);
+// extern void mtpower(mfft const * mtm, double * pow, double sigpow);
+// extern void mtm_spec(mfft * mtm, double *spec, const double *samples, int nsamples, int shift,
+//               int adapt);
 
 /* output a tab-delimited file */
 void
@@ -52,6 +79,7 @@ write_file(char const * fn, double *buf, int nrow, int ncol)
         fclose(fp);
 }
 
+// Cindy
 
 
 TracesProvider::TracesProvider(const QString& fileUrl,int nbChannels,int resolution,double samplingRate,int offset)
@@ -416,36 +444,36 @@ void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator
 
 
     // Cindy
-    mfft *mtmh;
-    int npoints = 17590;
-    int N = 256;
-    int Np = 201;
-    double NW = 3.5;
-    int step = 10;
-    int k = 6;
-    double tm = 6.0;
-    double psd[N];
-    double *specgram;
-    double sigpow;
-    int row = sizeof transdata / sizeof transdata[0];
-    const int l = (npoints - Np + 1) / step;
-
-    mtmh = mtm_init_dpss(N, N, NW, (int)(NW*2-1));
-    for (int i = 0; i < row; i++) {
-        sigpow = mtfft(mtmh, transdata[i], N);
-        mtpower(mtmh, psd, sigpow);
-        // free(psd);
-        specgram = new double[l*(N/2+1)];
-        printf("* MTM spectrogram to tfr_out_mtm\n");
-        mtm_spec(mtmh, specgram, transdata[i], npoints, step, 1);
-    }
-    // sigpow = mtfft(mtmh, transdata, N);
-    // mtpower(mtmh, psd, sigpow);
-    free(psd);
+    // mfft *mtmh;
+    // int npoints = 17590;
+    // int N = 256;
+    // int Np = 201;
+    // double NW = 3.5;
+    // int step = 10;
+    // int k = 6;
+    // double tm = 6.0;
+    // double psd[N];
+    // double *specgram;
+    // double sigpow;
+    // int row = sizeof transdata / sizeof transdata[0];
     // const int l = (npoints - Np + 1) / step;
-    // printf("* MTM spectrogram to tfr_out_mtm\n");
-    // mtm_spec(mtmh, specgram, (double*) transdata, npoints, step, 1);
-    write_file("tfr_out_tfr.dat", specgram, l, (N/2+1));
+
+    // mtmh = mtm_init_dpss(N, N, NW, (int)(NW*2-1));
+    // for (int i = 0; i < row; i++) {
+    //     sigpow = mtfft(mtmh, transdata[i], N);
+    //     mtpower(mtmh, psd, sigpow);
+    //     // free(psd);
+    //     specgram = new double[l*(N/2+1)];
+    //     printf("* MTM spectrogram to tfr_out_mtm\n");
+    //     mtm_spec(mtmh, specgram, transdata[i], npoints, step, 1);
+    // }
+    // // sigpow = mtfft(mtmh, transdata, N);
+    // // mtpower(mtmh, psd, sigpow);
+    // free(psd);
+    // // const int l = (npoints - Np + 1) / step;
+    // // printf("* MTM spectrogram to tfr_out_mtm\n");
+    // // mtm_spec(mtmh, specgram, (double*) transdata, npoints, step, 1);
+    // write_file("tfr_out_tfr.dat", specgram, l, (N/2+1));
     // Cindy
 
     //Send the information to the receiver.

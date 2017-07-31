@@ -26,7 +26,7 @@
 // #include <cstdio>
 #include <cstdlib>
 #include <cmath>
-#include "tfr.h"
+// #include "tfr.h"
 // Cindy
 
 // include files for Qt
@@ -53,7 +53,7 @@ NeuroscopeView::NeuroscopeView(NeuroscopeApp& mainWindow, const QString &label, 
                                bool greyScale, TracesProvider& tracesProvider, bool multiColumns, bool verticalLines,
                                bool raster, bool waveforms, bool labelsDisplay, int unitGain, int acquisitionGain, ChannelColors* channelColors,
                                QMap<int,QList<int> >* groupsChannels, QMap<int,int>* channelsGroups, bool autocenterChannels,
-                               QList<int> offsets, QList<int> channelGains, QList<int> selected, QMap<int,bool> skipStatus, int rasterHeight, const QString &backgroundImagePath, QWidget* parent, const char* name):
+                               QList<int> offsets, QList<int> channelGains, QList<int> selected, QMap<int,bool> skipStatus, int rasterHeight, const QString &backgroundImagePath, QWidget* parent, const char* name, int showSpect):
     DockArea(parent)
   ,shownChannels(channelsToDisplay),mainWindow(mainWindow),greyScaleMode(greyScale),
     multiColumns(multiColumns),verticalLines(verticalLines),raster(raster),waveforms(waveforms),selectMode(false),autocenterChannels(autocenterChannels),
@@ -158,9 +158,10 @@ NeuroscopeView::NeuroscopeView(NeuroscopeApp& mainWindow, const QString &label, 
     
     connect(&globalEventProvider,SIGNAL(getCurrentEventInformation(long,long,QObject*)),traceWidget,SLOT(getCurrentEventInformation(long,long,QObject*)));
 
+    if (NeuroscopeApp::showSpect == 1 ) {
     // Cindy
     // Add additional freqDock below mainDock
-    freqDock = new QDockWidget(tr("TFR Spectrogram"));
+    freqDock = new QDockWidget(tr("TFR1ma Spectrogram"));
     freqDock->setFeatures(QDockWidget::NoDockWidgetFeatures);
     addDockWidget(Qt::RightDockWidgetArea,freqDock);
 
@@ -238,6 +239,7 @@ NeuroscopeView::NeuroscopeView(NeuroscopeApp& mainWindow, const QString &label, 
     connect(this,SIGNAL(traceBackgroundImageUpdate(QImage,bool)),traceWidget,SLOT(traceBackgroundImageUpdate(QImage,bool)));
     
     connect(&globalEventProvider,SIGNAL(getCurrentEventInformation(long,long,QObject*)),traceWidget,SLOT(getCurrentEventInformation(long,long,QObject*)));
+    }
     //Cindy
 }
 

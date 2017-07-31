@@ -23,6 +23,10 @@
 #include <array.h>
 #include <types.h>
 
+// Cindy
+// cd #include <fftw3.h>
+// Cindy
+
 // include files for QT
 #include <QObject>
 
@@ -137,6 +141,18 @@ private:
 
     /**the total length of the document in miliseconds.*/
     qlonglong length;
+
+    // Cindy
+    // struct mfft_s {
+    //     int nfft;        /**< number of points in the transform */
+    //     int npoints;     /**< number of points in the taper(s) */
+    //     int ntapers;     /**< number of tapers */
+    //     double *tapers;  *< array holding tapers, dim ntapers x npoints 
+    //     double *weights; /**< array holding taper weights, dim ntapers */
+    //     double *buf;     /**< workspace for FFTW, dim ntapers x npoints */
+    //     fftw_plan plan;  /**< FFTW plan */
+    // };
+    // Cindy
 
     //Functions
 

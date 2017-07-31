@@ -85,6 +85,10 @@ NeuroscopeApp::NeuroscopeApp()
     setObjectName("NeuroScope");
     initView();
 
+    // Cindy
+    showSpect = 0;
+    // Cindy
+
     //Apply the user settings.
     initializePreferences();
 
@@ -179,6 +183,19 @@ void NeuroscopeApp::initActions()
     mPrintAction->setIcon(QPixmap(":/shared-icons/document-print"));
     mPrintAction->setShortcut(QKeySequence::Print);
     connect(mPrintAction, SIGNAL(triggered()), this, SLOT(slotFilePrint()));
+
+
+    // Cindy
+    fileMenu->addSeparator();
+
+    // QRadioButton *spect = new QRadioButton(tr("&spectrogram"));
+    // spect->setChecked(false);
+    mShowSpgrm = fileMenu->addAction(tr("&spectrogram"));
+    mShowSpgrm->setIcon(QIcon(":/icons/anatomy"));
+    mShowSpgrm->setCheckable(true);
+    mShowSpgrm->setChecked(0);
+    connect(mShowSpgrm, SIGNAL(triggered()), this, SLOT(showSpectrogram()));
+    // Cindy
 
     fileMenu->addSeparator();
 
@@ -616,6 +633,7 @@ void NeuroscopeApp::initActions()
     mMainToolBar->addAction(mRedo);
     mMainToolBar->addSeparator();
     mMainToolBar->addAction(editMode);
+    mMainToolBar->addAction(mShowSpgrm);
     addToolBar(mMainToolBar);
 
     mToolBar = new QToolBar(tr("Tools"));
@@ -921,7 +939,7 @@ void NeuroscopeApp::initDisplay(QList<int>* channelsToDisplay,bool autocenterCha
                                               doc->tracesDataProvider(),displayMode->isChecked(),clusterVerticalLines->isChecked(),
                                               clusterRaster->isChecked(),clusterWaveforms->isChecked(),showHideLabels->isChecked(),doc->getGain(),doc->getAcquisitionGain(),
                                               doc->channelColors(),doc->getDisplayGroupsChannels(),doc->getDisplayChannelsGroups(),autocenterChannels,
-                                              offsets,channelGains,selectedChannels,skipStatus,rasterHeight,doc->getTraceBackgroundImage(),mainDock,"TracesDisplay");
+                                              offsets,channelGains,selectedChannels,skipStatus,rasterHeight,doc->getTraceBackgroundImage(),mainDock,"TracesDisplay",showSpect);
 
     view->installEventFilter(this);
 
@@ -1599,6 +1617,22 @@ void NeuroscopeApp::slotFilePrint()
 
     slotStatusMsg(tr("Ready."));
 }
+
+// Cindy
+void NeuroscopeApp::showSpectrogram()
+{
+    slotStatusMsg(tr("Spectrogram..."));
+
+    if (showSpect == 1) showSpect = 0;
+    else showSpect = 1;
+
+    //Update the content of the view contains in active display.
+    activeView()->updateViewContents();
+
+    slotStatusMsg(tr("Ready."));
+}
+// Cindy
+
 
 void NeuroscopeApp::slotFileQuit()
 {
@@ -3457,7 +3491,9 @@ void NeuroscopeApp::slotStateChanged(const QString& state)
         mCloseAction->setEnabled(false);
         mUndo->setEnabled(false);
         mRedo->setEnabled(false);
-
+        // Cindy
+        mShowSpgrm->setEnabled(false);
+        // Cindy
         mCloseCluster->setEnabled(false);
         mSelectAllExcept0And1->setEnabled(false);
         mCreateEventFile->setEnabled(false);
@@ -3529,6 +3565,9 @@ void NeuroscopeApp::slotStateChanged(const QString& state)
         mSaveAction->setEnabled(true);
         mSaveAsAction->setEnabled(true);
         mPrintAction->setEnabled(true);
+        // Cindy
+        mShowSpgrm->setEnabled(true);
+        // Cindy
         mCloseAction->setEnabled(true);
         mCloseCluster->setEnabled(true);
         mCreateEventFile->setEnabled(true);

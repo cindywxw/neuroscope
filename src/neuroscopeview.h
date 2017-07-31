@@ -98,7 +98,7 @@ public:
                    bool raster,bool waveforms,bool labelsDisplay,int unitGain,int acquisitionGain,ChannelColors* channelColors,
                    QMap<int,QList<int> >* groupsChannels,QMap<int,int>* channelsGroups,
                    bool autocenterChannels, QList<int> offsets,QList<int> channelGains,QList<int> selected,QMap<int,bool> skipStatus,int rasterHeight,const QString& backgroundImagePath,
-                   QWidget *parent = 0, const char *name=0);
+                   QWidget *parent = 0, const char *name=0, int showSpect = 0);
     /** Destructor for the main view. */
     ~NeuroscopeView();
 
@@ -158,6 +158,9 @@ public:
     /**Retuns true if the channels of the display are display in a gradation of grey,
     * false if they are display in color.*/
     bool getGreyScale() const {return greyScaleMode;}
+
+    // Cindy
+    int showSpect;
 
     /**
     * Updates the list of channels shown with @p channelsToShow.

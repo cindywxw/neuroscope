@@ -63,6 +63,8 @@ public:
     explicit NeuroscopeApp();
     ~NeuroscopeApp();
 
+    static int showSpect;
+
     /**Opens a file, only one document at the time is allowed.
     * Asking for a new one will open a new instance of the application with it.
     */
@@ -338,6 +340,7 @@ private Q_SLOTS:
 
     /**Print the current display. */
     void slotFilePrint();
+    void showSpectrogram();
 
     /**Closes all open windows by calling close() on each memberList item until the list is empty, then quits the application.
      * If queryClose() returns false because the user canceled the saveModified() dialog, the closing breaks.
@@ -756,6 +759,7 @@ private:
     QAction* mOpenAction;
     QAction* mUndo;
     QAction* mRedo;
+    QAction* mShowSpgrm;
     QAction* mViewStatusBar;
     QAction* mPreferenceAction;
 
