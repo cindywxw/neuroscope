@@ -63,7 +63,7 @@ public:
     explicit NeuroscopeApp();
     ~NeuroscopeApp();
 
-    static int showSpect;
+    // static int showSpect;
 
     /**Opens a file, only one document at the time is allowed.
     * Asking for a new one will open a new instance of the application with it.

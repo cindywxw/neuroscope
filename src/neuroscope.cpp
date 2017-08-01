@@ -86,7 +86,7 @@ NeuroscopeApp::NeuroscopeApp()
     initView();
 
     // Cindy
-    showSpect = 0;
+    // showSpect = 0;
     // Cindy
 
     //Apply the user settings.
