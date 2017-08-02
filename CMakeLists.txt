@@ -56,6 +56,80 @@ add_definitions(${QT_DEFINITIONS} )
 set( QT_USE_XML TRUE)
 
 
+# Cindy
+#find_package(libtfr REQUIRED)
+#if( NOT libtfr_FOUND ) 
+#  message( FATAL_ERROR "Cannot find libtfr!" ) 
+#endif( NOT libtfr_FOUND )
+#message( STATUS "libtfr found")
+
+# include_directories("/usr/local/include" "/usr/local/lib")
+# link_directories("/usr/local/include" "/usr/local/lib")
+#find_library(TFR_LIB tfr /usr/local/lib)
+#add_library(${TFR_LIB} SHARED)
+#install(TARGETS ${TFR_LIB} DESTINATION lib)
+#install(FILES tfr.h DESTINATION include)
+# add_library(libtfr SHARED [GLOBAL])
+# add_executable (libtfr libtfr.cxx)
+# target_link_libraries(neuroscope ${TFR_LIB})
+# Cindy
+
+# Cindy
+# target_link_libraries(neuroscope ${TFR_LIB})
+# set_target_properties(neuroscope PROPERTIES LINKER_LANGUAGE CXX)
+# Cindy
+# Cindy
+#include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src) 
+#set(SOURCE_EXE src/main.cpp)
+#add_executable(main ${SOURCE_EXE})
+#include_directories("/usr/local/include")
+#include_directories("/usr/local/lib")
+#add_library(tfr SHARED IMPORTED)
+#set_property(TARGET tfr PROPERTY IMPORTED_LOCATION /usr/local/lib/libtfr.so)
+#target_link_libraries(main tfr)
+
+#include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
+#set (TFR_LIBS libtfr/tfr.h libtfr/mtm_impl.h)
+#set (TFR_SRCS libtfr/tfr.c libtfr/mtm.c)
+#add_library(tfr ${TFR_SRCS} ${TFR_LIBS})
+#target_link_libraries(tracesprovider.cpp)
+# Cindy
+
+# Cindy
+#add_subdirectory(libs)
+#add_subdirectory(src/core)
+#add_subdirectory(src/fft)
+#add_subdirectory(src/mfcc)
+#add_subdirectory(src/onset-detection-functions)
+#add_subdirectory(src/pitch)
+if (FFTW_INCLUDES)
+  # Already in cache
+  message( STATUS "fftw found")
+  set (FFTW_FIND_QUIETLY TRUE)
+endif (FFTW_INCLUDES)
+
+find_path (FFTW_INCLUDES fftw3.h)
+find_library (FFTW_LIBRARIES NAMES fftw3)
+# handle the QUIETLY and REQUIRED arguments and set FFTW_FOUND to TRUE if
+# all listed variables are TRUE
+include (FindPackageHandleStandardArgs)
+find_package_handle_standard_args (FFTW DEFAULT_MSG FFTW_LIBRARIES FFTW_INCLUDES)
+mark_as_advanced (FFTW_LIBRARIES FFTW_INCLUDES)
+
+if (TFR_INCLUDES)
+  # Already in cache
+  message( STATUS "tfr found")
+  set (TFR_FIND_QUIETLY TRUE)
+endif (TFR_INCLUDES)
+
+find_path (TFR_INCLUDES tfr.h)
+find_library (TFR_LIBRARIES NAMES tfr)
+# handle the QUIETLY and REQUIRED arguments and set TFR_FOUND to TRUE if
+# all listed variables are TRUE
+include (FindPackageHandleStandardArgs)
+find_package_handle_standard_args (TFR DEFAULT_MSG TFR_LIBRARIES TFR_INCLUDES)
+mark_as_advanced (TFR_LIBRARIES TFR_INCLUDES)
+# Cindy
 # tell cmake where to search for Qt/KDE headers:
 include_directories(${QT_INCLUDE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${QT_QTXML_INCLUDE_DIR} ${LIBKLUSTERSSHARED_INCLUDE_DIR})
 
@@ -129,8 +203,8 @@ if (CMAKE_COMPILER_IS_GNUCXX)
    endif (GCC_IS_NEWER_THAN_4_1)
 
    if (__KDE_HAVE_GCC_VISIBILITY AND GCC_IS_NEWER_THAN_4_1 AND NOT _GCC_COMPILED_WITH_BAD_ALLOCATOR AND NOT WIN32)
-      set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden")
-      set (KDE4_C_FLAGS "-fvisibility=hidden")
+      set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden -lm -lfftw3 -ltfr")
+      set (KDE4_C_FLAGS "-fvisibility=hidden -lm -lfftw3 -ltfr")
       # check that Qt defines Q_DECL_EXPORT as __attribute__ ((visibility("default")))
       # if it doesn't and KDE compiles with hidden default visibiltiy plugins will break
       set(_source "#include <QtCore/QtGlobal>\n int main()\n {\n #ifndef QT_VISIBILITY_AVAILABLE \n #error QT_VISIBILITY_AVAILABLE is not available\n #endif \n }\n")
@@ -145,8 +219,8 @@ if (CMAKE_COMPILER_IS_GNUCXX)
       endif(NOT _compile_result)
 
       if (GCC_IS_NEWER_THAN_4_2)
-          set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility-inlines-hidden")
-          MESSAGE(STATUS "compile with visibility hidden")
+          set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility-inlines-hidden -lm -lfftw3 -ltfr")
+          MESSAGE(STATUS "compile with visibility hidden lfftw3 ltfr")
       endif (GCC_IS_NEWER_THAN_4_2)
    else (__KDE_HAVE_GCC_VISIBILITY AND GCC_IS_NEWER_THAN_4_1 AND NOT _GCC_COMPILED_WITH_BAD_ALLOCATOR AND NOT WIN32)
       set (__KDE_HAVE_GCC_VISIBILITY 0)
@@ -167,8 +241,8 @@ if (CMAKE_C_COMPILER MATCHES "icc")
    set(CMAKE_C_FLAGS_DEBUG            "-O2 -g -fno-inline -noalign")
    set(CMAKE_C_FLAGS_DEBUGFULL        "-g -fno-inline -noalign")
 
-   set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS}   -ansi -Wall -w1 -Wpointer-arith -fno-common")
-   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ansi -Wall -w1 -Wpointer-arith -fno-exceptions -fno-common")
+   set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS}   -ansi -Wall -w1 -Wpointer-arith -fno-common -lm -lfftw3 -ltfr")
+   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ansi -Wall -w1 -Wpointer-arith -fno-exceptions -fno-common -lm -lfftw3 -ltfr")
 
    # visibility support
    set(__KDE_HAVE_ICC_VISIBILITY)
@@ -207,6 +281,7 @@ set(CMAKE_AUTOMOC TRUE)
 add_subdirectory(src)
 add_subdirectory(po)
 add_subdirectory(doc)
+
 
 INCLUDE(InstallRequiredSystemLibraries)
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Viewer for neurophysiological and behavioral data")
@@ -353,44 +428,6 @@ if(UNIX)
   endif()
 endif()
 
-# Cindy
-#find_package(libtfr REQUIRED)
-#if( NOT libtfr_FOUND ) 
-#  message( FATAL_ERROR "Cannot find libtfr!" ) 
-#endif( NOT libtfr_FOUND )
-#message( STATUS "libtfr found")
-
-# include_directories("/usr/local/include" "/usr/local/lib")
-# link_directories("/usr/local/include" "/usr/local/lib")
-#find_library(TFR_LIB tfr /usr/local/lib)
-#add_library(${TFR_LIB} SHARED)
-#install(TARGETS ${TFR_LIB} DESTINATION lib)
-#install(FILES tfr.h DESTINATION include)
-# add_library(libtfr SHARED [GLOBAL])
-# add_executable (libtfr libtfr.cxx)
-# target_link_libraries(neuroscope ${TFR_LIB})
-# Cindy
-
-# Cindy
-# target_link_libraries(neuroscope ${TFR_LIB})
-# set_target_properties(neuroscope PROPERTIES LINKER_LANGUAGE CXX)
-# Cindy
-
 include(CPack)
 
-# Cindy
-#include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src) 
-#set(SOURCE_EXE src/main.cpp)
-#add_executable(main ${SOURCE_EXE})
-#include_directories("/usr/local/include")
-#include_directories("/usr/local/lib")
-#add_library(tfr SHARED IMPORTED)
-#set_property(TARGET tfr PROPERTY IMPORTED_LOCATION /usr/local/lib/libtfr.so)
-#target_link_libraries(main tfr)
 
-#include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
-#set (TFR_LIBS libtfr/tfr.h libtfr/mtm_impl.h)
-#set (TFR_SRCS libtfr/tfr.c libtfr/mtm.c)
-#add_library(tfr ${TFR_SRCS} ${TFR_LIBS})
-#target_link_libraries(tracesprovider.cpp)
-# Cindy

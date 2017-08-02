@@ -55,9 +55,9 @@ add_executable(neuroscope WIN32 ${neuroscope_SRCS} )
 
 
 if(Qt5Core_FOUND)
-  target_link_libraries( neuroscope ${LIBKLUSTERSSHARED_LIBRARY} Qt5::Widgets Qt5::Xml ${Qt5WebKitWidgets_LIBRARIES})
+  target_link_libraries( neuroscope ${LIBKLUSTERSSHARED_LIBRARY} Qt5::Widgets Qt5::Xml ${Qt5WebKitWidgets_LIBRARIES} ${QT_QTXML_LIBRARY} ${FFTW_LIBRARIES} ${TFR_LIBRARIES})
 else(Qt5Core_FOUND)
-  target_link_libraries( neuroscope ${LIBKLUSTERSSHARED_LIBRARY} ${QT_LIBRARIES} ${QT_QTXML_LIBRARY})
+target_link_libraries( neuroscope ${LIBKLUSTERSSHARED_LIBRARY} ${QT_LIBRARIES} ${QT_QTXML_LIBRARY} ${FFTW_LIBRARIES} ${TFR_LIBRARIES})
 endif()
 
 

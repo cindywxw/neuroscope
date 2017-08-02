@@ -24,7 +24,22 @@
 #include <types.h>
 
 // Cindy
-// cd #include <fftw3.h>
+extern "C" {
+// #include <mtm_impl.h>
+#include <tfr.h> 
+}
+
+// #include "Gist.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <time.h>
+#include <fftw3.h>
+#include <iostream>
+#include <cmath>
+#include <fstream>
+// #ifndef M_PI
+// #define M_PI 3.14159265358979323846264338327
+// #endif
 // Cindy
 
 // include files for QT
@@ -144,14 +159,15 @@ private:
 
     // Cindy
     // struct mfft_s {
-    //     int nfft;        /**< number of points in the transform */
-    //     int npoints;     /**< number of points in the taper(s) */
-    //     int ntapers;     /**< number of tapers */
-    //     double *tapers;  *< array holding tapers, dim ntapers x npoints 
-    //     double *weights; /**< array holding taper weights, dim ntapers */
-    //     double *buf;     /**< workspace for FFTW, dim ntapers x npoints */
-    //     fftw_plan plan;  /**< FFTW plan */
+        // int nfft;        /**< number of points in the transform */
+        // int npoints;     /**< number of points in the taper(s) */
+        // int ntapers;     /**< number of tapers */
+        // double *tapers;  /**< array holding tapers, dim ntapers x npoints */
+        // double *weights; /**< array holding taper weights, dim ntapers */
+        // double *buf;     /**< workspace for FFTW, dim ntapers x npoints */
+        // fftw_plan plan;  /**< FFTW plan */
     // };
+    // typedef struct mfft_s mfft;
     // Cindy
 
     //Functions

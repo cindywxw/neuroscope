@@ -939,7 +939,7 @@ void NeuroscopeApp::initDisplay(QList<int>* channelsToDisplay,bool autocenterCha
                                               doc->tracesDataProvider(),displayMode->isChecked(),clusterVerticalLines->isChecked(),
                                               clusterRaster->isChecked(),clusterWaveforms->isChecked(),showHideLabels->isChecked(),doc->getGain(),doc->getAcquisitionGain(),
                                               doc->channelColors(),doc->getDisplayGroupsChannels(),doc->getDisplayChannelsGroups(),autocenterChannels,
-                                              offsets,channelGains,selectedChannels,skipStatus,rasterHeight,doc->getTraceBackgroundImage(),mainDock,"TracesDisplay",showSpect);
+                                              offsets,channelGains,selectedChannels,skipStatus,rasterHeight,doc->getTraceBackgroundImage(),mainDock,"TracesDisplay"/*,showSpect*/);
 
     view->installEventFilter(this);
 
@@ -1623,8 +1623,8 @@ void NeuroscopeApp::showSpectrogram()
 {
     slotStatusMsg(tr("Spectrogram..."));
 
-    if (showSpect == 1) showSpect = 0;
-    else showSpect = 1;
+    // if (showSpect == 1) showSpect = 0;
+    // else showSpect = 1;
 
     //Update the content of the view contains in active display.
     activeView()->updateViewContents();
