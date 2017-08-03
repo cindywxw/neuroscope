@@ -161,7 +161,7 @@ NeuroscopeView::NeuroscopeView(NeuroscopeApp& mainWindow, const QString &label, 
     // if (NeuroscopeApp::showSpect == 1 ) {
     // Cindy
     // Add additional freqDock below mainDock
-    freqDock = new QDockWidget(tr("TFR1ma Spectrogram"));
+    freqDock = new QDockWidget(tr("TFR Spectrogram"));
     freqDock->setFeatures(QDockWidget::NoDockWidgetFeatures);
     addDockWidget(Qt::RightDockWidgetArea,freqDock);
 

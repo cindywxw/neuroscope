@@ -45,18 +45,20 @@
 // Cindy
 
 // Cindy
-#ifdef __cplusplus
-extern "C"{
-#endif
-    struct mfft_s;
-    typedef struct mfft_s mfft;
-    mfft * mtm_init_dpss(int nfft, int npoints, double nw, int ntapers);
-    double mtfft(mfft *, double const *, int);
-    void mtpower(mfft const *, double *, double);
-    void mtm_spec(mfft *, double *, const double *, int, int, int);
-#ifdef __cplusplus
-}
-#endif
+// #ifdef __cplusplus
+// extern "C"{
+// #endif
+//     struct mfft_s;
+//     typedef struct mfft_s mfft;
+//     mfft * mtm_init_dpss(int nfft, int npoints, double nw, int ntapers);
+//     double mtfft(mfft *, double const *, int);
+//     void mtpower(mfft const *, double *, double);
+//     void mtm_spec(mfft *, double *, const double *, int, int, int);
+//     void tfr_spec(mfft * mtm, double *spec, const double *samples, int nsamples, int k, int shift,
+//          double flock, int tlock, int nfreq, const double *fgrid)
+// #ifdef __cplusplus
+// }
+// #endif
 
 // typedef struct mfft_s mfft;
 // extern mfft * mtm_init_dpss(int nfft, int npoints, double nw, int ntapers);
@@ -190,6 +192,7 @@ void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator
     for(int i = 0; i < nbChannels; i++) {
         transdata[i] = new double[nbSamples];
     }
+    double * ddata = new double[nbSamples * nbChannels];
 
     // to clean up
     // for(int i = 0; i < nbChannels; i++) {
@@ -367,6 +370,7 @@ void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator
                 int row = nbValues/nbSamples;
                 int column = nbValues - row*nbSamples;
                 transdata[row][column] = static_cast<double>(retrieveData[i]) - static_cast<double>(offset);
+                ddata[i] = static_cast<double>(retrieveData[i]) - static_cast<double>(offset);
                 // Cindy
             }
         } else {
@@ -379,6 +383,7 @@ void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator
                 int row = nbValues/nbSamples;
                 int column = nbValues - row*nbSamples;
                 transdata[row][column] = static_cast<double>(retrieveData[i]);
+                ddata[i] = static_cast<double>(retrieveData[i]) - static_cast<double>(offset);
                 // Cindy
             }
         }
@@ -424,6 +429,7 @@ void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator
                 int row = nbValues/nbSamples;
                 int column = nbValues - row*nbSamples;
                 transdata[row][column] = static_cast<double>(retrieveData[i]) - static_cast<double>(offset);
+                ddata[i] = static_cast<double>(retrieveData[i]) - static_cast<double>(offset);
                 // Cindy
             }
         }
@@ -437,6 +443,7 @@ void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator
                 int row = nbValues/nbSamples;
                 int column = nbValues - row*nbSamples;
                 transdata[row][column] = static_cast<double>(retrieveData[i]);
+                ddata[i] = static_cast<double>(retrieveData[i]) - static_cast<double>(offset);
                 // Cindy
             }
         }
@@ -447,37 +454,70 @@ void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator
 
 
     // Cindy
-    mfft *mtmh;
-    int npoints = 17590;
+
+
+    // mfft *mtmh;
+    // int npoints = 17590;
     int N = 256;
     int Np = 201;
     double NW = 3.5;
     int step = 10;
     int k = 6;
     double tm = 6.0;
-    double psd[N];
-    double *specgram;
-    double sigpow;
-    int row = sizeof transdata / sizeof transdata[0];
-    const int l = (npoints - Np + 1) / step;
-
-    mtmh = mtm_init_dpss(N, N, NW, (int)(NW*2-1));
-    for (int i = 0; i < row; i++) {
-        sigpow = mtfft(mtmh, transdata[i], N);
-        mtpower(mtmh, psd, sigpow);
-        // free(psd);
-        specgram = new double[l*(N/2+1)];
-        printf("* MTM spectrogram to tfr_out_mtm\n");
-        mtm_spec(mtmh, specgram, transdata[i], npoints, step, 1);
-    }
-    // sigpow = mtfft(mtmh, transdata, N);
-    // mtpower(mtmh, psd, sigpow);
-    free(psd);
+    // double psd[N];
+    // double *specgram;
+    // double sigpow;
+    // int row = sizeof transdata / sizeof transdata[0];
     // const int l = (npoints - Np + 1) / step;
-    // printf("* MTM spectrogram to tfr_out_mtm\n");
-    // mtm_spec(mtmh, specgram, (double*) transdata, npoints, step, 1);
-    write_file("tfr_out_tfr.dat", specgram, l, (N/2+1));
-    printf("* MTM spectrogram to tfr_out_tfr\n");
+
+    // mtmh = mtm_init_dpss(N, N, NW, (int)(NW*2-1));
+    // for (int i = 0; i < row; i++) {
+    //     sigpow = mtfft(mtmh, transdata[i], N);
+    //     mtpower(mtmh, psd, sigpow);
+    //     // free(psd);
+    //     specgram = new double[l*(N/2+1)];
+    //     printf("* MTM spectrogram to tfr_out_mtm\n");
+    //     mtm_spec(mtmh, specgram, transdata[i], npoints, step, 1);
+    // }
+    // // sigpow = mtfft(mtmh, transdata, N);
+    // // mtpower(mtmh, psd, sigpow);
+    // free(psd);
+    // // const int l = (npoints - Np + 1) / step;
+    // // printf("* MTM spectrogram to tfr_out_mtm\n");
+    // // mtm_spec(mtmh, specgram, (double*) transdata, npoints, step, 1);
+    // printf("* MTM spectrogram to tfr_out_tfr\n");
+    // write_file("tfr_out_tfr.dat", specgram, l, (N/2+1));
+
+    // int npoints = (endTime - startTime) * samplingRate;
+    int npoints = nbSamples;
+    mfft *mtmh;
+    mtmh = mtm_init_dpss(N, N, NW, (int)(NW*2-1));
+    printf("* MTM initialized\n");
+    double * psd = new double[N];
+    // mfft * mtmh;
+    double sigpow;
+    sigpow = mtfft(mtmh, ddata, N);
+    printf("mtfft performed\n");
+    mtpower(mtmh, psd, sigpow);
+    // free(psd);
+    const int l = (npoints - Np + 1) / step;
+    printf("* MTM spectrogram to tfr_out_mtm\n");
+    // double *specgram = new double[l * (N/2+1)];
+    double *specgram = new double[nbSamples];
+    double * sig = new double[npoints];
+    // printf("mtm_spec start\n");
+    // mtm_spec(mtmh, specgram, sig, npoints, step, 1);
+    // printf("mtm_spec done\n");
+    mtmh = mtm_init_herm(N, Np, k, tm);
+
+    tfr_spec(mtmh, specgram, sig, npoints, -1, step, 0.01, 5, 0, NULL);
+    printf("tfr_spec done\n");
+    Array<dataType> res;
+    res.setSize(nbSamples,nbChannels);
+    for ( int i = 0; i < sizeof(specgram); i++) {
+        res[i] = specgram[i];
+    }
+    emit dataReady(res,initiator);
     // Cindy
 
     // Cindy
@@ -492,66 +532,66 @@ void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator
     // gist.processAudioFrame (transdata[1], nbSamples);
 
 
-    int i;
-double y;
-N=50;
-double Fs=1000;//sampling frequency
-double  T=1/Fs;//sample time 
-double f=50;//frequency
-double *in;
-fftw_complex *out;
-double t[N];//time vector 
-double ff[N];
-fftw_plan plan_forward;
+//     int i;
+// double y;
+// N=50;
+// double Fs=1000;//sampling frequency
+// double  T=1/Fs;//sample time 
+// double f=50;//frequency
+// double *in;
+// fftw_complex *out;
+// double t[N];//time vector 
+// double ff[N];
+// fftw_plan plan_forward;
 
-in = (double*) fftw_malloc(sizeof(double) * N);
-out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * N);
+// in = (double*) fftw_malloc(sizeof(double) * N);
+// out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * N);
 
- for (int i=0; i< N;i++)
- {
-    t[i]=i*T;
-    ff[i]=1/t[i];
-    in[i] =0.7 *sin(2*M_PI*f*t[i]);// generate sine waveform
-    double multiplier = 0.5 * (1 - cos(2*M_PI*i/(N-1)));//Hanning Window
-    in[i] = multiplier * in[i];
-  }
+//  for (int i=0; i< N;i++)
+//  {
+//     t[i]=i*T;
+//     ff[i]=1/t[i];
+//     in[i] =0.7 *sin(2*M_PI*f*t[i]);// generate sine waveform
+//     double multiplier = 0.5 * (1 - cos(2*M_PI*i/(N-1)));//Hanning Window
+//     in[i] = multiplier * in[i];
+//   }
 
-  plan_forward = fftw_plan_dft_r2c_1d ( N, in, out, FFTW_ESTIMATE );
+//   plan_forward = fftw_plan_dft_r2c_1d ( N, in, out, FFTW_ESTIMATE );
 
-  fftw_execute ( plan_forward );
+//   fftw_execute ( plan_forward );
 
-  double v[N];
+//   double v[N];
 
-  for (int i = 0; i < N; i++)
-    {
+//   for (int i = 0; i < N; i++)
+//     {
 
-    v[i]=20*log(sqrt(out[i][0]*out[i][0]+ out[i][1]*out[i][1])/N/2);//Here I have calculated the y axis of the spectrum in dB
+//     v[i]=20*log(sqrt(out[i][0]*out[i][0]+ out[i][1]*out[i][1])/N/2);//Here I have calculated the y axis of the spectrum in dB
 
-    }
+//     }
 
-   std::ofstream myfile;
+//    std::ofstream myfile;
 
-   myfile.open("example2.txt");
+//    myfile.open("example2.txt");
 
-   myfile << "plot '-' using 1:2" << std::endl;
+//    myfile << "plot '-' using 1:2" << std::endl;
 
-   for(i = 0; i < N; ++i)
+//    for(i = 0; i < N; ++i)
 
-    { 
+//     { 
 
-      myfile << ff[i]<< " " << v[i]<< std::endl;
+//       myfile << ff[i]<< " " << v[i]<< std::endl;
 
-    }
+//     }
 
- myfile.close();
+//  myfile.close();
 
- fftw_destroy_plan ( plan_forward );
- fftw_free ( in );
- fftw_free ( out );
+//  fftw_destroy_plan ( plan_forward );
+//  fftw_free ( in );
+//  fftw_free ( out );
     // Cindy
 
     //Send the information to the receiver.
-    emit dataReady(data,initiator);
+    // emit dataReady(data,initiator);
 }
 
 void TracesProvider::computeRecordingLength(){
