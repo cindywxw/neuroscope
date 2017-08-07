@@ -59,7 +59,7 @@ TraceView::TraceView(TracesProvider& tracesProvider,bool greyScale,bool multiCol
     multiColumns(multiColumns),
     verticalLines(verticalLines),
     raster(raster),
-    waveforms(waveforms),
+    waveforms(waveforms), /*waveforms changed to !waveforms*/
     dataReady(false),data(),
     autocenterChannels(autocenterChannels),
     channelOffsets(channelOffsets),

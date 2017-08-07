@@ -137,6 +137,7 @@ void TracesProvider::requestData(long startTime,long endTime,QObject* initiator,
 
 void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator,long startTimeInRecordingUnits)
 {
+    printf("%ld, %ld\n", startTime, endTime);
     Array<dataType> data;
     // Cindy
     // to store the spectrogram data
@@ -187,11 +188,11 @@ void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator
     
     // Cindy
     specdata.setSize(nbSamples,nbChannels);
-    double **transdata;
-    transdata = new double *[nbChannels];
-    for(int i = 0; i < nbChannels; i++) {
-        transdata[i] = new double[nbSamples];
-    }
+    // double **transdata;
+    // transdata = new double *[nbChannels];
+    // for(int i = 0; i < nbChannels; i++) {
+        // transdata[i] = new double[nbSamples];
+    // }
     double * ddata = new double[nbSamples * nbChannels];
 
     // to clean up
@@ -366,10 +367,10 @@ void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator
                 data[i] = static_cast<dataType>(retrieveData[i]) - static_cast<dataType>(offset);
                 // Cindy
                 specdata[i] = static_cast<dataType>(retrieveData[i]) - static_cast<dataType>(offset);
-                // transdata
-                int row = nbValues/nbSamples;
-                int column = nbValues - row*nbSamples;
-                transdata[row][column] = static_cast<double>(retrieveData[i]) - static_cast<double>(offset);
+                // // transdata
+                // int row = nbValues/nbSamples;
+                // int column = nbValues - row*nbSamples;
+                // transdata[row][column] = static_cast<double>(retrieveData[i]) - static_cast<double>(offset);
                 ddata[i] = static_cast<double>(retrieveData[i]) - static_cast<double>(offset);
                 // Cindy
             }
@@ -380,9 +381,9 @@ void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator
                 // Cindy
                 specdata[i] = static_cast<dataType>(retrieveData[i]);
                 // transdata
-                int row = nbValues/nbSamples;
-                int column = nbValues - row*nbSamples;
-                transdata[row][column] = static_cast<double>(retrieveData[i]);
+                // int row = nbValues/nbSamples;
+                // int column = nbValues - row*nbSamples;
+                // transdata[row][column] = static_cast<double>(retrieveData[i]);
                 ddata[i] = static_cast<double>(retrieveData[i]) - static_cast<double>(offset);
                 // Cindy
             }
@@ -426,9 +427,9 @@ void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator
                 // Cindy
                 specdata[i] = retrieveData[i] - static_cast<dataType>(offset);
                 // transdata
-                int row = nbValues/nbSamples;
-                int column = nbValues - row*nbSamples;
-                transdata[row][column] = static_cast<double>(retrieveData[i]) - static_cast<double>(offset);
+                // int row = nbValues/nbSamples;
+                // int column = nbValues - row*nbSamples;
+                // transdata[row][column] = static_cast<double>(retrieveData[i]) - static_cast<double>(offset);
                 ddata[i] = static_cast<double>(retrieveData[i]) - static_cast<double>(offset);
                 // Cindy
             }
@@ -440,9 +441,9 @@ void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator
                 // Cindy
                 specdata[i] = static_cast<dataType>(retrieveData[i]);
                 // transdata
-                int row = nbValues/nbSamples;
-                int column = nbValues - row*nbSamples;
-                transdata[row][column] = static_cast<double>(retrieveData[i]);
+                // int row = nbValues/nbSamples;
+                // int column = nbValues - row*nbSamples;
+                // transdata[row][column] = static_cast<double>(retrieveData[i]);
                 ddata[i] = static_cast<double>(retrieveData[i]) - static_cast<double>(offset);
                 // Cindy
             }
@@ -489,32 +490,43 @@ void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator
     // write_file("tfr_out_tfr.dat", specgram, l, (N/2+1));
 
     // int npoints = (endTime - startTime) * samplingRate;
-    int npoints = nbSamples;
+    int npoints = static_cast<int>(samplingRate);
+    // int npoints = sizeof(ddata)/sizeof(*ddata);
+    printf("%d\n", npoints);
+    printf("%ld, %ld\n", startTime, endTime);
+    printf("%lf\n",samplingRate );
+    printf("%d\n",nbChannels );
+    printf("%d\n",nbSamples );
+
+    // printf("samplingRate = %d, nbChannels= %d, nbSamples= %d, startTime = %ld, endTime = %ld\n",samplingRate, nbChannels, nbSamples, startTime,endTime);
+
     mfft *mtmh;
     mtmh = mtm_init_dpss(N, N, NW, (int)(NW*2-1));
     printf("* MTM initialized\n");
-    double * psd = new double[N];
+    // double * psd = new double[N];
     // mfft * mtmh;
     double sigpow;
-    sigpow = mtfft(mtmh, ddata, N);
+    sigpow = mtfft(mtmh, ddata+8300, N);
     printf("mtfft performed\n");
+    double *psd = new double[N];
     mtpower(mtmh, psd, sigpow);
+    printf("mtpower performed\n");
     // free(psd);
     const int l = (npoints - Np + 1) / step;
     printf("* MTM spectrogram to tfr_out_mtm\n");
     // double *specgram = new double[l * (N/2+1)];
-    double *specgram = new double[nbSamples];
-    double * sig = new double[npoints];
+    double *specgram = new double[l*(N/2+1)];
+    // double * sig = new double[npoints];
     // printf("mtm_spec start\n");
-    // mtm_spec(mtmh, specgram, sig, npoints, step, 1);
-    // printf("mtm_spec done\n");
-    mtmh = mtm_init_herm(N, Np, k, tm);
+    mtm_spec(mtmh, specgram, ddata, npoints, step, 1);
+    printf("mtm_spec done\n");
 
-    tfr_spec(mtmh, specgram, sig, npoints, -1, step, 0.01, 5, 0, NULL);
-    printf("tfr_spec done\n");
+    // // mtmh = mtm_init_herm(N, Np, k, tm);
+    // // tfr_spec(mtmh, specgram, sig, npoints, -1, step, 0.01, 5, 0, NULL);
+    // // printf("tfr_spec done\n");
     Array<dataType> res;
     res.setSize(nbSamples,nbChannels);
-    for ( int i = 0; i < sizeof(specgram); i++) {
+    for ( int i = 0; i < sizeof(specgram)/sizeof(double); i++) {
         res[i] = specgram[i];
     }
     emit dataReady(res,initiator);
