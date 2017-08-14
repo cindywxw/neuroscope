@@ -26,6 +26,7 @@
 // #include <cstdio>
 #include <cstdlib>
 #include <cmath>
+
 // #include "tfr.h"
 // Cindy
 
@@ -45,6 +46,9 @@
 
 // Cindy
 // using namespace std;
+# include "plot.h"
+#include <qtoolbar.h>
+#include <qtoolbutton.h>
 // CIndy
 
 class EventData;
@@ -84,7 +88,7 @@ NeuroscopeView::NeuroscopeView(NeuroscopeApp& mainWindow, const QString &label, 
     addDockWidget(Qt::RightDockWidgetArea,mainDock);
 
     traceWidget = new TraceWidget(startTime,duration,greyScale,tracesProvider,multiColumns,verticalLines,raster,
-                                  !waveforms,labelsDisplay,*shownChannels,unitGain,acquisitionGain,channelColors,groupsChannels,channelsGroups,autocenterChannels,
+                                  waveforms,labelsDisplay,*shownChannels,unitGain,acquisitionGain,channelColors,groupsChannels,channelsGroups,autocenterChannels,
                                   channelOffsets,gains,skippedChannels,rasterHeight,QImage(backgroundImagePath),mainDock,"traces",backgroundColor,statusBar,5);
 	 /// Added by M.Zugaro to enable automatic forward paging
     connect(traceWidget,SIGNAL(stopped()),this,SLOT(traceWidgetStopped()));
@@ -161,11 +165,9 @@ NeuroscopeView::NeuroscopeView(NeuroscopeApp& mainWindow, const QString &label, 
     // if (NeuroscopeApp::showSpect == 1 ) {
     // Cindy
     // Add additional freqDock below mainDock
-    // freqDock = new QDockWidget(tr("TFR Spectrogram"));
-    // freqDock->setFeatures(QDockWidget::NoDockWidgetFeatures);
-    // addDockWidget(Qt::RightDockWidgetArea,freqDock);
-
-
+    freqDock = new QDockWidget(tr("TFR Spectrogram"));
+    freqDock->setFeatures(QDockWidget::NoDockWidgetFeatures);
+    addDockWidget(Qt::RightDockWidgetArea,freqDock);
 
     // traceWidget = new TraceWidget(startTime,duration,greyScale,tracesProvider,multiColumns,verticalLines,raster,
     //                               waveforms,labelsDisplay,*shownChannels,unitGain,acquisitionGain,channelColors,groupsChannels,channelsGroups,autocenterChannels,
@@ -238,8 +240,28 @@ NeuroscopeView::NeuroscopeView(NeuroscopeApp& mainWindow, const QString &label, 
     // connect(this,SIGNAL(increaseTheRasterHeight()),traceWidget,SLOT(increaseRasterHeight()));
     // connect(this,SIGNAL(traceBackgroundImageUpdate(QImage,bool)),traceWidget,SLOT(traceBackgroundImageUpdate(QImage,bool)));
     
-    // connect(&globalEventProvider,SIGNAL(getCurrentEventInformation(long,long,QObject*)),traceWidget,SLOT(getCurrentEventInformation(long,long,QObject*)));
+    // connect(&globalEventProvider,SIGNAL(getCurrentEventInformation(long,long,QObject*)),traceWsFidget,SLOT(getCurrentEventInformation(long,long,QObject*)));
     // }
+
+
+    Plot *d_plot;
+    d_plot = new Plot( this );
+
+    QToolBar *toolBar = new QToolBar( this );
+
+    QToolButton *btnSpectrogram = new QToolButton( toolBar );
+    btnSpectrogram->setText( "Spectrogram" );
+    btnSpectrogram->setCheckable( true );
+    btnSpectrogram->setToolButtonStyle( Qt::ToolButtonTextUnderIcon );
+    toolBar->addWidget( btnSpectrogram );
+    connect( btnSpectrogram, SIGNAL( toggled( bool ) ), d_plot, SLOT( showSpectrogram( bool ) ) );
+
+    QToolButton *btnContour = new QToolButton( toolBar );
+    btnContour->setText( "Contour" );
+    btnContour->setCheckable( true );
+    btnContour->setToolButtonStyle( Qt::ToolButtonTextUnderIcon );
+    toolBar->addWidget( btnContour );
+    connect( btnContour, SIGNAL( toggled( bool ) ), d_plot, SLOT( showContour( bool ) ) );
     //Cindy
 }
 

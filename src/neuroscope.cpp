@@ -191,7 +191,7 @@ void NeuroscopeApp::initActions()
     // QRadioButton *spect = new QRadioButton(tr("&spectrogram"));
     // spect->setChecked(false);
     mShowSpgrm = fileMenu->addAction(tr("&spectrogram"));
-    mShowSpgrm->setIcon(QIcon(":/icons/anatomy"));
+    mShowSpgrm->setIcon(QIcon(":/icons/spectrogram"));
     mShowSpgrm->setCheckable(true);
     mShowSpgrm->setChecked(0);
     connect(mShowSpgrm, SIGNAL(triggered()), this, SLOT(showSpectrogram()));

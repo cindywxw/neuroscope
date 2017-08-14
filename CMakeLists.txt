@@ -57,51 +57,6 @@ set( QT_USE_XML TRUE)
 
 
 # Cindy
-#find_package(libtfr REQUIRED)
-#if( NOT libtfr_FOUND ) 
-#  message( FATAL_ERROR "Cannot find libtfr!" ) 
-#endif( NOT libtfr_FOUND )
-#message( STATUS "libtfr found")
-
-# include_directories("/usr/local/include" "/usr/local/lib")
-# link_directories("/usr/local/include" "/usr/local/lib")
-#find_library(TFR_LIB tfr /usr/local/lib)
-#add_library(${TFR_LIB} SHARED)
-#install(TARGETS ${TFR_LIB} DESTINATION lib)
-#install(FILES tfr.h DESTINATION include)
-# add_library(libtfr SHARED [GLOBAL])
-# add_executable (libtfr libtfr.cxx)
-# target_link_libraries(neuroscope ${TFR_LIB})
-# Cindy
-
-# Cindy
-# target_link_libraries(neuroscope ${TFR_LIB})
-# set_target_properties(neuroscope PROPERTIES LINKER_LANGUAGE CXX)
-# Cindy
-# Cindy
-#include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src) 
-#set(SOURCE_EXE src/main.cpp)
-#add_executable(main ${SOURCE_EXE})
-#include_directories("/usr/local/include")
-#include_directories("/usr/local/lib")
-#add_library(tfr SHARED IMPORTED)
-#set_property(TARGET tfr PROPERTY IMPORTED_LOCATION /usr/local/lib/libtfr.so)
-#target_link_libraries(main tfr)
-
-#include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
-#set (TFR_LIBS libtfr/tfr.h libtfr/mtm_impl.h)
-#set (TFR_SRCS libtfr/tfr.c libtfr/mtm.c)
-#add_library(tfr ${TFR_SRCS} ${TFR_LIBS})
-#target_link_libraries(tracesprovider.cpp)
-# Cindy
-
-# Cindy
-#add_subdirectory(libs)
-#add_subdirectory(src/core)
-#add_subdirectory(src/fft)
-#add_subdirectory(src/mfcc)
-#add_subdirectory(src/onset-detection-functions)
-#add_subdirectory(src/pitch)
 if (FFTW_INCLUDES)
   # Already in cache
   message( STATUS "fftw found")
@@ -129,9 +84,105 @@ find_library (TFR_LIBRARIES NAMES tfr)
 include (FindPackageHandleStandardArgs)
 find_package_handle_standard_args (TFR DEFAULT_MSG TFR_LIBRARIES TFR_INCLUDES)
 mark_as_advanced (TFR_LIBRARIES TFR_INCLUDES)
+
+# SECOND
+IF(NOT QT4_FOUND)
+    INCLUDE(FindQt4)
+ENDIF(NOT QT4_FOUND)
+
+
+if (QWT_INCLUDES)
+  # Already in cache
+  message( STATUS "qwt found")
+  set (QWT_FIND_QUIETLY TRUE)
+endif (QWT_INCLUDES)
+
+SET(QWT_FOUND "NO")
+SET(QWT_FIND_REQUIRED "YES")
+
+IF(QT4_FOUND)
+   FIND_PATH(QWT_INCLUDES qwt_plot_spectrogram.h
+       /usr/local/qwt/include
+       /usr/local/include
+       /usr/include/qwt
+       /usr/include/qwt/include
+       /usr/include/qwt-qt4
+       /usr/include/qwt5
+       /usr/include
+       $ENV{QWT_DIR}/include
+       $ENV{QWT_DIR}/src
+       $ENV{QWTDIR}/include
+       $ENV{QWTDIR}/src
+       $ENV{QWT_ROOT}/include
+       $ENV{QWT_ROOT}/src
+       $ENV{QWTROOT}/include
+       $ENV{QWTROOT}/src
+    )
+    # MESSAGE(STATUS "include dir: ${QWT_INCLUDES}")
+
+    SET(POTENTIAL_LIBRARY_PATHS /usr/local/qwt/lib /usr/local/lib /usr/lib
+                              $ENV{QWT_DIR}/lib $ENV{QWTDIR}/lib $ENV{QWT_ROOT}/lib $ENV{QWTROOT}/lib)
+                
+    SET(QWT_NAMES ${QWT_NAMES} qwt qwt-qt4 qwt5 )
+    FIND_LIBRARY(QWT_LIBRARY
+        NAMES ${QWT_NAMES}
+        PATHS ${POTENTIAL_LIBRARY_PATHS}
+    )
+    # MESSAGE(STATUS "qwt lib: ${QWT_LIBRARY}")
+    # MESSAGE(STATUS "qwt name: ${QWT_NAMES}")
+    MARK_AS_ADVANCED(QWT_LIBRARY)
+  
+    IF (QWT_LIBRARY)
+      IF(WIN32 AND NOT CYGWIN)
+    
+       SET(QWT_NAMES_DEBUG qwtd qwtd-qt4 qwtd5 )
+           FIND_LIBRARY(QWT_LIBRARY_DEBUG
+               NAMES ${QWT_NAMES_DEBUG}
+               PATHS ${POTENTIAL_LIBRARY_PATHS}
+            )
+          MARK_AS_ADVANCED(QWT_LIBRARY_DEBUG)
+      
+          IF(QWT_LIBRARY_DEBUG)
+          SET(QWT_LIBRARIES optimized ${QWT_LIBRARY} debug ${QWT_LIBRARY_DEBUG} CACHE DOC "QWT library files")
+      ELSE(QWT_LIBRARY_DEBUG)
+          SET(QWT_LIBRARIES ${QWT_LIBRARY} CACHE DOC "QWT library files")
+      ENDIF(QWT_LIBRARY_DEBUG)
+      
+      ELSE(WIN32 AND NOT CYGWIN)
+    
+        SET(QWT_LIBRARIES ${QWT_LIBRARY} CACHE DOC "QWT library files")
+      
+    ENDIF(WIN32 AND NOT CYGWIN)
+    
+        SET(QWT_FOUND "YES")
+
+        IF (CYGWIN)
+            IF(BUILD_SHARED_LIBS)
+            # No need to define QWT_USE_DLL here, because it's default for Cygwin.
+            ELSE(BUILD_SHARED_LIBS)
+            SET (QWT_DEFINITIONS -DQWT_STATIC)
+            ENDIF(BUILD_SHARED_LIBS)
+        ENDIF (CYGWIN)
+
+    ENDIF (QWT_LIBRARY)
+ENDIF(QT4_FOUND)
+
+IF (QWT_FOUND)
+  IF (NOT QWT_FIND_QUIETLY)
+    MESSAGE(STATUS "Found Qwt: ${QWT_LIBRARIES}")
+  ENDIF (NOT QWT_FIND_QUIETLY)
+ELSE (QWT_FOUND)
+  IF (QWT_FIND_REQUIRED)
+    MESSAGE(FATAL_ERROR "Could not find Qwt library")
+  ENDIF (QWT_FIND_REQUIRED)
+ENDIF (QWT_FOUND)
+# find_package_handle_standard_args (QWT DEFAULT_MSG QWT_LIBRARY QWT_INCLUDES)
+MARK_AS_ADVANCED(QWT_INCLUDES QWT_LIBRARIES)
+
 # Cindy
+
 # tell cmake where to search for Qt/KDE headers:
-include_directories(${QT_INCLUDE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${QT_QTXML_INCLUDE_DIR} ${LIBKLUSTERSSHARED_INCLUDE_DIR})
+include_directories(${QT_INCLUDE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${QT_QTXML_INCLUDE_DIR} ${LIBKLUSTERSSHARED_INCLUDE_DIR} ${TFR_INCLUDES} ${FFTW_INCLUDES} ${QWT_INCLUDES})
 
 # This macro is for internal use only
 # Return the directories present in gcc's include path.
@@ -203,8 +254,8 @@ if (CMAKE_COMPILER_IS_GNUCXX)
    endif (GCC_IS_NEWER_THAN_4_1)
 
    if (__KDE_HAVE_GCC_VISIBILITY AND GCC_IS_NEWER_THAN_4_1 AND NOT _GCC_COMPILED_WITH_BAD_ALLOCATOR AND NOT WIN32)
-      set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden -lm -lfftw3 -ltfr")
-      set (KDE4_C_FLAGS "-fvisibility=hidden -lm -lfftw3 -ltfr")
+      set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden -lm -lfftw3 -ltfr -lqwt-qt4")
+      set (KDE4_C_FLAGS "-fvisibility=hidden -lm -lfftw3 -ltfr -lqwt")
       # check that Qt defines Q_DECL_EXPORT as __attribute__ ((visibility("default")))
       # if it doesn't and KDE compiles with hidden default visibiltiy plugins will break
       set(_source "#include <QtCore/QtGlobal>\n int main()\n {\n #ifndef QT_VISIBILITY_AVAILABLE \n #error QT_VISIBILITY_AVAILABLE is not available\n #endif \n }\n")
@@ -215,12 +266,12 @@ if (CMAKE_COMPILER_IS_GNUCXX)
       try_compile(_compile_result ${CMAKE_BINARY_DIR} ${_source_file} CMAKE_FLAGS "${_include_dirs}" COMPILE_OUTPUT_VARIABLE _compile_output_var)
 
       if(NOT _compile_result)
-         message(FATAL_ERROR "Qt compiled without support for -fvisibility=hidden. This will break plugins and linking of some applications. Please fix your Qt installation.")
+         message(FATAL_ERROR "Qt compiled without support for -fvisibility=hidden lfftw3 ltfr lqwt. This will break plugins and linking of some applications. Please fix your Qt installation.")
       endif(NOT _compile_result)
 
       if (GCC_IS_NEWER_THAN_4_2)
-          set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility-inlines-hidden -lm -lfftw3 -ltfr")
-          MESSAGE(STATUS "compile with visibility hidden lfftw3 ltfr")
+          set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility-inlines-hidden -lm -lfftw3 -ltfr -lqwt-qt4")
+          MESSAGE(STATUS "compile with visibility hidden lfftw3 ltfr lqwt")
       endif (GCC_IS_NEWER_THAN_4_2)
    else (__KDE_HAVE_GCC_VISIBILITY AND GCC_IS_NEWER_THAN_4_1 AND NOT _GCC_COMPILED_WITH_BAD_ALLOCATOR AND NOT WIN32)
       set (__KDE_HAVE_GCC_VISIBILITY 0)
@@ -241,8 +292,8 @@ if (CMAKE_C_COMPILER MATCHES "icc")
    set(CMAKE_C_FLAGS_DEBUG            "-O2 -g -fno-inline -noalign")
    set(CMAKE_C_FLAGS_DEBUGFULL        "-g -fno-inline -noalign")
 
-   set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS}   -ansi -Wall -w1 -Wpointer-arith -fno-common -lm -lfftw3 -ltfr")
-   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ansi -Wall -w1 -Wpointer-arith -fno-exceptions -fno-common -lm -lfftw3 -ltfr")
+   set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS}   -ansi -Wall -w1 -Wpointer-arith -fno-common -lm -lfftw3 -ltfr -lqwt")
+   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ansi -Wall -w1 -Wpointer-arith -fno-exceptions -fno-common -lm -lfftw3 -ltfr -lqwt")
 
    # visibility support
    set(__KDE_HAVE_ICC_VISIBILITY)

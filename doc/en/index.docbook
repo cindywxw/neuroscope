@@ -1317,6 +1317,29 @@ The Postscript format is ideal to import a figure into a drawing program for add
 </sect2>
 </sect1>
 
+<!-- Cindy -->
+<sect1 id="spectrogram">
+<title>Spectrogram display</title>
+<sect2>
+<title>spectrogram</title>
+<para>
+To show the spectrogram, select <menuchoice> <guimenu>File</guimenu> <guimenuitem>Spectrogram</guimenuitem> </menuchoice>.
+</para>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="Images/spectrogram.png" format="PNG"/>
+	  </imageobject>
+	  <imageobject>
+	    <imagedata fileref="Images/spectrogram.eps" format="EPS"/>
+	  </imageobject>
+	  <textobject>
+	    <phrase>Spectro.</phrase>
+	  </textobject>
+	</mediaobject>
+</sect2>
+</sect1>
+<!-- Cindy -->
+
 
 <sect1 id="saving">
 <title>Session Management</title>
@@ -1324,6 +1347,8 @@ The Postscript format is ideal to import a figure into a drawing program for add
 In a typical session, you open a data file, browse the local field potentials, maybe create several different displays, load and display spikes, events and positions, etc. You then end your session. The next time you reopen the same data file, &neuroscope; will make sure that your session is restored exactly as it was when you closed it. Even better, this will happen whatever file you open from the same recording, be it the <filename>.dat</filename> file, the <filename>.eeg</filename> file, or any other recording file. This is made possible because all the relevant information is automatically saved to disk when you end a session (you do not need to explicitly save it yourself). Notice that this is different from saving your work via the <guilabel>Save</guilabel> menu entry or toolbar button, which applies to changes in the spike and anatomical groups, as well as to changes in the events.
 </para>
 </sect1>
+
+
 
 </chapter>
 
