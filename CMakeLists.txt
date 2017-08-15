@@ -18,6 +18,8 @@ if(NOT ENFORCE_QT4_BUILD)
 endif()
 
 if(Qt5Core_FOUND)
+  MESSAGE(STATUS "qt5 found")
+  find_package(Qt5Core QUIET)
   find_package(Qt5Gui REQUIRED)
   find_package(Qt5Widgets REQUIRED)
   find_package(Qt5Xml REQUIRED)
@@ -57,19 +59,9 @@ set( QT_USE_XML TRUE)
 
 
 # Cindy
-if (FFTW_INCLUDES)
-  # Already in cache
-  message( STATUS "fftw found")
-  set (FFTW_FIND_QUIETLY TRUE)
-endif (FFTW_INCLUDES)
+find_package(FFTW REQUIRED)
+find_package(QWT REQUIRED)
 
-find_path (FFTW_INCLUDES fftw3.h)
-find_library (FFTW_LIBRARIES NAMES fftw3)
-# handle the QUIETLY and REQUIRED arguments and set FFTW_FOUND to TRUE if
-# all listed variables are TRUE
-include (FindPackageHandleStandardArgs)
-find_package_handle_standard_args (FFTW DEFAULT_MSG FFTW_LIBRARIES FFTW_INCLUDES)
-mark_as_advanced (FFTW_LIBRARIES FFTW_INCLUDES)
 
 if (TFR_INCLUDES)
   # Already in cache
@@ -85,104 +77,15 @@ include (FindPackageHandleStandardArgs)
 find_package_handle_standard_args (TFR DEFAULT_MSG TFR_LIBRARIES TFR_INCLUDES)
 mark_as_advanced (TFR_LIBRARIES TFR_INCLUDES)
 
-# SECOND
-IF(NOT QT4_FOUND)
-    INCLUDE(FindQt4)
-ENDIF(NOT QT4_FOUND)
+find_path (LIBQT5CORE_LIB libQt5Core.so)
+mark_as_advanced (LIBQT5CORE_LIB)
 
 
-if (QWT_INCLUDES)
-  # Already in cache
-  message( STATUS "qwt found")
-  set (QWT_FIND_QUIETLY TRUE)
-endif (QWT_INCLUDES)
-
-SET(QWT_FOUND "NO")
-SET(QWT_FIND_REQUIRED "YES")
-
-IF(QT4_FOUND)
-   FIND_PATH(QWT_INCLUDES qwt_plot_spectrogram.h
-       /usr/local/qwt/include
-       /usr/local/include
-       /usr/include/qwt
-       /usr/include/qwt/include
-       /usr/include/qwt-qt4
-       /usr/include/qwt5
-       /usr/include
-       $ENV{QWT_DIR}/include
-       $ENV{QWT_DIR}/src
-       $ENV{QWTDIR}/include
-       $ENV{QWTDIR}/src
-       $ENV{QWT_ROOT}/include
-       $ENV{QWT_ROOT}/src
-       $ENV{QWTROOT}/include
-       $ENV{QWTROOT}/src
-    )
-    # MESSAGE(STATUS "include dir: ${QWT_INCLUDES}")
-
-    SET(POTENTIAL_LIBRARY_PATHS /usr/local/qwt/lib /usr/local/lib /usr/lib
-                              $ENV{QWT_DIR}/lib $ENV{QWTDIR}/lib $ENV{QWT_ROOT}/lib $ENV{QWTROOT}/lib)
-                
-    SET(QWT_NAMES ${QWT_NAMES} qwt qwt-qt4 qwt5 )
-    FIND_LIBRARY(QWT_LIBRARY
-        NAMES ${QWT_NAMES}
-        PATHS ${POTENTIAL_LIBRARY_PATHS}
-    )
-    # MESSAGE(STATUS "qwt lib: ${QWT_LIBRARY}")
-    # MESSAGE(STATUS "qwt name: ${QWT_NAMES}")
-    MARK_AS_ADVANCED(QWT_LIBRARY)
-  
-    IF (QWT_LIBRARY)
-      IF(WIN32 AND NOT CYGWIN)
-    
-       SET(QWT_NAMES_DEBUG qwtd qwtd-qt4 qwtd5 )
-           FIND_LIBRARY(QWT_LIBRARY_DEBUG
-               NAMES ${QWT_NAMES_DEBUG}
-               PATHS ${POTENTIAL_LIBRARY_PATHS}
-            )
-          MARK_AS_ADVANCED(QWT_LIBRARY_DEBUG)
-      
-          IF(QWT_LIBRARY_DEBUG)
-          SET(QWT_LIBRARIES optimized ${QWT_LIBRARY} debug ${QWT_LIBRARY_DEBUG} CACHE DOC "QWT library files")
-      ELSE(QWT_LIBRARY_DEBUG)
-          SET(QWT_LIBRARIES ${QWT_LIBRARY} CACHE DOC "QWT library files")
-      ENDIF(QWT_LIBRARY_DEBUG)
-      
-      ELSE(WIN32 AND NOT CYGWIN)
-    
-        SET(QWT_LIBRARIES ${QWT_LIBRARY} CACHE DOC "QWT library files")
-      
-    ENDIF(WIN32 AND NOT CYGWIN)
-    
-        SET(QWT_FOUND "YES")
-
-        IF (CYGWIN)
-            IF(BUILD_SHARED_LIBS)
-            # No need to define QWT_USE_DLL here, because it's default for Cygwin.
-            ELSE(BUILD_SHARED_LIBS)
-            SET (QWT_DEFINITIONS -DQWT_STATIC)
-            ENDIF(BUILD_SHARED_LIBS)
-        ENDIF (CYGWIN)
-
-    ENDIF (QWT_LIBRARY)
-ENDIF(QT4_FOUND)
-
-IF (QWT_FOUND)
-  IF (NOT QWT_FIND_QUIETLY)
-    MESSAGE(STATUS "Found Qwt: ${QWT_LIBRARIES}")
-  ENDIF (NOT QWT_FIND_QUIETLY)
-ELSE (QWT_FOUND)
-  IF (QWT_FIND_REQUIRED)
-    MESSAGE(FATAL_ERROR "Could not find Qwt library")
-  ENDIF (QWT_FIND_REQUIRED)
-ENDIF (QWT_FOUND)
-# find_package_handle_standard_args (QWT DEFAULT_MSG QWT_LIBRARY QWT_INCLUDES)
-MARK_AS_ADVANCED(QWT_INCLUDES QWT_LIBRARIES)
 
 # Cindy
 
 # tell cmake where to search for Qt/KDE headers:
-include_directories(${QT_INCLUDE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${QT_QTXML_INCLUDE_DIR} ${LIBKLUSTERSSHARED_INCLUDE_DIR} ${TFR_INCLUDES} ${FFTW_INCLUDES} ${QWT_INCLUDES})
+include_directories(${QT_INCLUDE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${QT_QTXML_INCLUDE_DIR} ${LIBKLUSTERSSHARED_INCLUDE_DIR} ${TFR_INCLUDES} ${FFTW_INCLUDE_DIR} ${QWT_INCLUDE_DIR})
 
 # This macro is for internal use only
 # Return the directories present in gcc's include path.
@@ -254,8 +157,8 @@ if (CMAKE_COMPILER_IS_GNUCXX)
    endif (GCC_IS_NEWER_THAN_4_1)
 
    if (__KDE_HAVE_GCC_VISIBILITY AND GCC_IS_NEWER_THAN_4_1 AND NOT _GCC_COMPILED_WITH_BAD_ALLOCATOR AND NOT WIN32)
-      set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden -lm -lfftw3 -ltfr -lqwt-qt4")
-      set (KDE4_C_FLAGS "-fvisibility=hidden -lm -lfftw3 -ltfr -lqwt")
+      set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden")
+      set (KDE4_C_FLAGS "-fvisibility=hidden")
       # check that Qt defines Q_DECL_EXPORT as __attribute__ ((visibility("default")))
       # if it doesn't and KDE compiles with hidden default visibiltiy plugins will break
       set(_source "#include <QtCore/QtGlobal>\n int main()\n {\n #ifndef QT_VISIBILITY_AVAILABLE \n #error QT_VISIBILITY_AVAILABLE is not available\n #endif \n }\n")
@@ -270,7 +173,7 @@ if (CMAKE_COMPILER_IS_GNUCXX)
       endif(NOT _compile_result)
 
       if (GCC_IS_NEWER_THAN_4_2)
-          set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility-inlines-hidden -lm -lfftw3 -ltfr -lqwt-qt4")
+          set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility-inlines-hidden")
           MESSAGE(STATUS "compile with visibility hidden lfftw3 ltfr lqwt")
       endif (GCC_IS_NEWER_THAN_4_2)
    else (__KDE_HAVE_GCC_VISIBILITY AND GCC_IS_NEWER_THAN_4_1 AND NOT _GCC_COMPILED_WITH_BAD_ALLOCATOR AND NOT WIN32)
@@ -292,8 +195,8 @@ if (CMAKE_C_COMPILER MATCHES "icc")
    set(CMAKE_C_FLAGS_DEBUG            "-O2 -g -fno-inline -noalign")
    set(CMAKE_C_FLAGS_DEBUGFULL        "-g -fno-inline -noalign")
 
-   set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS}   -ansi -Wall -w1 -Wpointer-arith -fno-common -lm -lfftw3 -ltfr -lqwt")
-   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ansi -Wall -w1 -Wpointer-arith -fno-exceptions -fno-common -lm -lfftw3 -ltfr -lqwt")
+   set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS}   -ansi -Wall -w1 -Wpointer-arith -fno-common ")
+   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ansi -Wall -w1 -Wpointer-arith -fno-exceptions -fno-common")
 
    # visibility support
    set(__KDE_HAVE_ICC_VISIBILITY)
@@ -345,6 +248,10 @@ set(CPACK_PACKAGE_INSTALL_DIRECTORY "neuroscope")
 set(CPACK_PACKAGE_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
 if(WIN32)
   install(FILES ${LIBKLUSTERSSHARED_DLL_DIR}/libklustersshared.dll DESTINATION bin)
+# Cindy
+  install(FILES ${FFTW_DLL_DIR}/fftw.dll DESTINATION bin)
+  install(FILES ${QWT_DLL_DIR}/qwt.dll DESTINATION bin)
+# Cindy
   set (QT_QTCORE_LIBRARY ${QT_LIBRARY_DIR}/../bin/QtCore4.dll)
   set (QT_QTGUI_LIBRARY ${QT_LIBRARY_DIR}/../bin/QtGui4.dll)
   set (QT_QTNETWORK_LIBRARY ${QT_LIBRARY_DIR}/../bin/QtNetwork4.dll)
@@ -386,7 +293,9 @@ if(UNIX)
       set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Michaël Zugaro")
       set(CPACK_DEBIAN_PACKAGE_SECTION "Science")
       set(CPACK_DEBIAN_PACKAGE_RECOMMENDS "nphys-data, klusters, ndmanager")
-      set(CPACK_DEBIAN_PACKAGE_DEPENDS "libklustersshared, libqt4-network, libqt4-xml, libqtcore4, libqtgui4, libqtwebkit4")
+      # Cindy
+      set(CPACK_DEBIAN_PACKAGE_DEPENDS "libklustersshared, libqt4-network, libqt4-xml, libqtcore4, libqtgui4, libqtwebkit4, fftw, qwt")
+      # Cindy
       set(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA "${CMAKE_CURRENT_SOURCE_DIR}/postinst;${CMAKE_CURRENT_SOURCE_DIR}/postrm;" )
       set(CPACK_DEBIAN_PACKAGE_HOMEPAGE "http://neuroscope.sourceforge.net")
       set(CPACK_GENERATOR "DEB")
@@ -406,7 +315,7 @@ if(UNIX)
     #  set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Michaël Zugaro")
     #  set(CPACK_DEBIAN_PACKAGE_SECTION "Science")
     #  set(CPACK_DEBIAN_PACKAGE_RECOMMENDS "nphys-data, klusters, ndmanager")
-    #  set(CPACK_DEBIAN_PACKAGE_DEPENDS "libklustersshared, libqt4-network, libqt4-xml, libqtcore4, libqtgui4, libqtwebkit4")
+    #  set(CPACK_DEBIAN_PACKAGE_DEPENDS "libklustersshared, libqt4-network, libqt4-xml, libqtcore4, libqtgui4, libqtwebkit4, fftw, qwt")
     #  set(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA "${CMAKE_CURRENT_SOURCE_DIR}/postinst;${CMAKE_CURRENT_SOURCE_DIR}/postrm;" )
     #  set(CPACK_DEBIAN_PACKAGE_HOMEPAGE "http://neuroscope.sourceforge.net")
     #  set(CPACK_GENERATOR "DEB")
@@ -425,7 +334,7 @@ if(UNIX)
       set(CPACK_RPM_PACKAGE_GROUP "Science")
       set(CPACK_RPM_PACKAGE_LICENSE "GPL")
       set(CPACK_RPM_PACKAGE_SUGGESTS "nphys-data, klusters, ndmanager")
-      set(CPACK_RPM_PACKAGE_REQUIRES "libklustersshared, libqt4, libqt4-x11, libQtWebKit4")
+      set(CPACK_RPM_PACKAGE_REQUIRES "libklustersshared, libqt4, libqt4-x11, libQtWebKit4, fftw, qwt")
       set(CPACK_RPM_PACKAGE_URL "http://neuroscope.sourceforge.net")
       set(CPACK_GENERATOR "RPM")
       set(CPACK_PACKAGE_FILE_NAME ${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-${RELEASE}.${CPACK_RPM_PACKAGE_ARCHITECTURE})
@@ -445,7 +354,7 @@ if(UNIX)
       set(CPACK_RPM_PACKAGE_GROUP "Science")
       set(CPACK_RPM_PACKAGE_LICENSE "GPL")
       set(CPACK_RPM_PACKAGE_SUGGESTS "nphys-data, klusters, ndmanager")
-      set(CPACK_RPM_PACKAGE_REQUIRES "libklustersshared, qt, qt-mobility, qtwebkit, qt-x11")
+      set(CPACK_RPM_PACKAGE_REQUIRES "libklustersshared, qt, qt-mobility, qtwebkit, qt-x11, fftw, qwt")
       set(CPACK_RPM_PACKAGE_URL "http://neuroscope.sourceforge.net")
       set(CPACK_GENERATOR "RPM")
       set(CPACK_PACKAGE_FILE_NAME ${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}.fc${RELEASE}.${CPACK_RPM_PACKAGE_ARCHITECTURE})
@@ -468,7 +377,7 @@ if(UNIX)
     #  set(CPACK_RPM_PACKAGE_GROUP "Science")
     #  set(CPACK_RPM_PACKAGE_LICENSE "GPL")
     #  set(CPACK_RPM_PACKAGE_SUGGESTS "nphys-data, klusters, ndmanager")
-    #  set(CPACK_RPM_PACKAGE_REQUIRES "libklustersshared, libqt4, libqt4-x11, libQtWebKit4")
+    #  set(CPACK_RPM_PACKAGE_REQUIRES "libklustersshared, libqt4, libqt4-x11, libQtWebKit4, fftw, qwt")
     #  set(CPACK_RPM_PACKAGE_URL "http://neuroscope.sourceforge.net")
     #  set(CPACK_GENERATOR "RPM")
     #  set(CPACK_PACKAGE_FILE_NAME ${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-${RELEASE}.${CPACK_RPM_PACKAGE_ARCHITECTURE})
