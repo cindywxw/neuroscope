@@ -54,6 +54,9 @@
 #include "prefdialog.h"
 #include "configuration.h"  // class Configuration
 #include "propertiesdialog.h"
+// Cindy
+// #include "spectrogramdialog.h"
+// Cindy
 #include "traceview.h"
 #include "itempalette.h"
 #include "eventsprovider.h"
@@ -77,6 +80,9 @@ NeuroscopeApp::NeuroscopeApp()
     ,eventsModified(false)
     ,initialOffsetDefault(0)
     ,propertiesDialog(0L)
+    // Cindy
+    /*,spectrogramDialog(0L)*/
+    // Cindy
     ,select(false)
     ,initialTimeWindow(0)
     ,undoRedoInprocess(false)
@@ -1622,7 +1628,8 @@ void NeuroscopeApp::slotFilePrint()
 void NeuroscopeApp::showSpectrogram()
 {
     slotStatusMsg(tr("Spectrogram..."));
-
+    // if(spectrogramDialog == 0L)
+    //     spectrogramDialog = new spectrogramDialog(this);
     // if (showSpect == 1) showSpect = 0;
     // else showSpect = 1;
 

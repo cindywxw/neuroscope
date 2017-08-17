@@ -26,10 +26,41 @@ set(neuroscope_SRCS
 	prefdialog.cpp 
 	prefgeneral.cpp  
 	properties.cpp 
-	propertiesdialog.cpp 
+	propertiesdialog.cpp
 	tags.cpp 
 	tracesprovider.cpp
 	plot.cpp
+	qwt_plot_spectrogram.cpp
+	qwt_plot_renderer.cpp
+	qwt_raster_data.cpp
+	qwt_interval.cpp
+	qwt_math.cpp
+	qwt_point_3d.cpp
+	qwt_plot_rasteritem.cpp
+	qwt_plot_item.cpp
+	qwt_text.cpp
+	qwt_plot_dict.cpp
+	qwt_plot.cpp
+	qwt_plot_layout.cpp
+	qwt_text.cpp
+	qwt_painter.cpp
+	qwt_clipper.cpp
+	qwt_point_polar.cpp
+	qwt_color_map.cpp
+	qwt_scale_map.cpp
+	qwt_text_engine.cpp
+	qwt_text_label.cpp
+	qwt_plot_canvas.cpp
+	qwt_null_paintdevice.cpp
+	qwt_scale_widget.cpp
+	qwt_scale_engine.cpp
+	qwt_dyngrid_layout.cpp
+	qwt_scale_draw.cpp
+	qwt_scale_div.cpp
+	qwt_abstract_scale_draw.cpp
+	qwt_legend.cpp
+	qwt_legend_item.cpp
+	qwt_symbol.cpp
 	traceview.cpp 
 	tracewidget.cpp 
 	sessionxmlwriter.cpp 

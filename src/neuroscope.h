@@ -39,6 +39,7 @@
 class NeuroscopeDoc;
 class PrefDialog;
 class PropertiesDialog;
+// class SpectrogramDialog;
 class ChannelPalette;
 class ItemPalette;
 class QRecentFileAction;
@@ -848,6 +849,11 @@ private:
 
     /**Properties dialog.*/
     PropertiesDialog* propertiesDialog;
+
+    // Cindy
+    /**Spectrogram dialog.*/
+    // SpectrogramDialog* spectrogramDialog;
+    // Cindy
 
     /**Background color for the views.*/
     QColor backgroundColor;

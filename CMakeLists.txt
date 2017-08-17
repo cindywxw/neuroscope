@@ -81,7 +81,7 @@ find_path (LIBQT5CORE_LIB libQt5Core.so)
 mark_as_advanced (LIBQT5CORE_LIB)
 
 
-
+set(CMAKE_AUTOUIC ON)
 # Cindy
 
 # tell cmake where to search for Qt/KDE headers:

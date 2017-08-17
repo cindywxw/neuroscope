@@ -12,7 +12,7 @@
 #
 
 
-set(QWT_LIBRARY_NAMES qwt qwt5 qwt-qt5 qwt6-qt5)
+set(QWT_LIBRARY_NAMES qwt-qt4 qwt5 qwt-qt5 qwt6-qt5)
 
 find_library(QWT_LIBRARY
   NAMES ${QWT_LIBRARY_NAMES}
@@ -36,7 +36,7 @@ FIND_PATH(QWT_INCLUDE_DIR NAMES qwt.h PATHS
   /usr/local/include
   "$ENV{LIB_DIR}/include"
   "$ENV{INCLUDE}"
-  PATH_SUFFIXES qwt qwt5 qwt-qt5 qwt6 
+  PATH_SUFFIXES qwt-qt4 qwt5 qwt-qt5 qwt6 
 )
 
 IF (QWT_INCLUDE_DIR AND QWT_LIBRARY)

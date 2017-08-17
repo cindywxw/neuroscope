@@ -243,19 +243,19 @@ NeuroscopeView::NeuroscopeView(NeuroscopeApp& mainWindow, const QString &label, 
     // connect(&globalEventProvider,SIGNAL(getCurrentEventInformation(long,long,QObject*)),traceWsFidget,SLOT(getCurrentEventInformation(long,long,QObject*)));
     // }
 
+    printf("try to plot" );
+    Plot *d_plot;
+    d_plot = new Plot( this );
+    printf("try to add toolbar" );
+    QToolBar *toolBar = new QToolBar( this );
 
-    // Plot *d_plot;
-    // d_plot = new Plot( this );
-
-    // QToolBar *toolBar = new QToolBar( this );
-
-    // QToolButton *btnSpectrogram = new QToolButton( toolBar );
-    // btnSpectrogram->setText( "Spectrogram" );
-    // btnSpectrogram->setCheckable( true );
-    // btnSpectrogram->setToolButtonStyle( Qt::ToolButtonTextUnderIcon );
-    // toolBar->addWidget( btnSpectrogram );
-    // connect( btnSpectrogram, SIGNAL( toggled( bool ) ), d_plot, SLOT( showSpectrogram( bool ) ) );
-
+    QToolButton *btnSpectrogram = new QToolButton( toolBar );
+    btnSpectrogram->setText( "Spectrogram" );
+    btnSpectrogram->setCheckable( true );
+    btnSpectrogram->setToolButtonStyle( Qt::ToolButtonTextUnderIcon );
+    toolBar->addWidget( btnSpectrogram );
+    connect( btnSpectrogram, SIGNAL( toggled( bool ) ), d_plot, SLOT( showSpectrogram( bool ) ) );
+    printf("added toolbar" );
     // QToolButton *btnContour = new QToolButton( toolBar );
     // btnContour->setText( "Contour" );
     // btnContour->setCheckable( true );
