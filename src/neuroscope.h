@@ -286,8 +286,6 @@ protected:
     * @param duration time window in miliseconds, the default is 1000.
     * @param startTime starting time in miliseconds.
     * @param tabLabel label for the display when in tab page mode.
-    //Cindy
-    * @param radButton button for choosing spectrogram to display.
     */
     void initDisplay(QList<int>* channelsToDisplay,bool autocenterChannels,QList<int> offsets,QList<int> channelGains,
                      QList<int> selectedChannels,QMap<int,bool>& skipStatus,int rasterHeight=-1,long duration = 1000,long startTime = 0,QString tabLabel = QString()/*,QRadioButton*/ );

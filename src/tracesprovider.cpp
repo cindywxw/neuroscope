@@ -423,7 +423,6 @@ void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator
 
     // Cindy
     mfft *mtmh;
-    // int npoints = 17590;
     int N = 256;
     int Np = 201;
     double NW = 3.5;
@@ -431,36 +430,18 @@ void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator
     int k = 6;
     double tm = 6.0;
     double psd[N];
-    // double *specgram;
     double sigpow;
-    // int row = sizeof transdata / sizeof transdata[0];
-    // const int l = (npoints - Np + 1) / step;
-
-    // int npoints = (endTime - startTime) * samplingRate;
     int npoints = static_cast<int>(samplingRate);
-    // double sr = static_cast<double>(samplingRate);
-    // int npoints = sizeof(ddata)/sizeof(*ddata);
 
-    // printf("samplingRate = %d, nbChannels= %d, nbSamples= %d, startTime = %ld, endTime = %ld\n",samplingRate, nbChannels, nbSamples, startTime,endTime);
-    
-    // std::vector<double> sigals;
-    // std::vector<std::vector<double> > image_data;
-    // Spectrogram* spectrogram = new Spectrogram(this);
-    // mfft *mtmh;
     mtmh = mtm_init_dpss(N, N, NW, (int)(NW*2-1));
-    printf("* MTM initialized\n");
-    // double * psd = new double[N];
-    // // mfft * mtmh;
-    // double sigpow;
+    // printf("* MTM initialized\n");
     sigpow = mtfft(mtmh, ddata+8300, N);
-    printf("mtfft performed\n");
-    // double *psd = new double[N];
+    // printf("mtfft performed\n");
     mtpower(mtmh, psd, sigpow);
-    printf("mtpower performed\n");
+    // printf("mtpower performed\n");
     // free(psd);
     const int l = (npoints - Np + 1) / step;
-    printf("* MTM spectrogram to tfr_out_mtm\n");
-    // double *specgram = new double[l * (N/2+1)];
+    // printf("* MTM spectrogram to tfr_out_mtm\n");
     double *specgram = new double[l*(N/2+1)];
     // double * sig = new double[npoints];
     // printf("mtm_spec start\n");
