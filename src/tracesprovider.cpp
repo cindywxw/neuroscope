@@ -19,20 +19,6 @@
 //#define _LARGEFILE_SOURCE already defined in /usr/include/features.h
 #define _FILE_OFFSET_BITS 64
 
-// Cindy
-// #include <cstdlib>
-// #include <cmath>
-// #include "tfr.h"
-// extern "C" {
-// #include "tfr.h"
-// #include "mtm_impl.h"
-// }
-//temporary
-// #include <stdlib.h>
-// #include <stdio.h>
-// #include <fstream>
-// Cindy
-
 //include files for the application
 #include "tracesprovider.h"
 
@@ -41,18 +27,13 @@
 #include <QDebug>
 #include <QFileInfo>
 // Cindy
-// #include "Gist.h"
-// #include "qwt_plot.h"
-// #include "qwt_plot_curve.h"
-// #include "qwt_plot_spectrogram.h"
-// #include <qwt_plot_spectrogram.h>
-// Cindy
-
 #include <vector>
 #include <QVector>
 #include <algorithm>
 #include <limits>
 #include <cassert>
+#include "spectrogram.h"
+// Cindy
 /* output a tab-delimited file */
 void
 write_file(char const * fn, double *buf, int nrow, int ncol)
@@ -69,172 +50,6 @@ write_file(char const * fn, double *buf, int nrow, int ncol)
         }
         fclose(fp);
 }
-
-double log10scale(double val)
-{
-    assert(val >= 0 && val <= 1);
-    return std::log10(1+9*val);
-}
-
-double log10scale_inv(double val)
-{
-    assert(val >= 0 && val <= 1);
-    return (std::pow(10, val)-1)/9;
-}
-
-// to <0,1> (cutoff negative)
-void normalize_image(std::vector<std::vector<double> >& data)
-{
-    double max = 0.0f;
-    for (std::vector<std::vector<double> >::iterator it=data.begin();
-            it!=data.end(); ++it)
-        max = std::max(*std::max_element(it->begin(), it->end()), max);
-    if (max == 0.0f)
-        return;
-    for (std::vector<std::vector<double> >::iterator it=data.begin(); it!=data.end(); ++it)
-        for (std::vector<double>::iterator i = it->begin(); i != it->end(); ++i)
-            *i = std::abs(*i)/max;
-}
-
-double calc_intensity(double val, AxisScale intensity_axis)
-{
-    assert(val >= 0 && val <= 1);
-    switch (intensity_axis)
-    {
-        case SCALE_LOGARITHMIC:
-            return log10scale(val);
-        case SCALE_LINEAR:
-            return val;
-        default:
-            assert(false);
-    }
-}
-
-double brightness_correction(double intensity, BrightCorrection correction)
-{
-    switch (correction)
-    {
-        case BRIGHT_NONE:
-            return intensity;
-        case BRIGHT_SQRT:
-            return std::sqrt(intensity);
-    }
-    assert(false);
-}
-
-// Spectrogram::Spectrogram(QObject* parent) // defaults
-//     : QObject(parent)
-//     , bandwidth(100)
-//     , basefreq(55)
-//     , maxfreq(22050)
-//     , overlap(0.8)
-//     , pixpersec(100)
-//     , window(WINDOW_HANN)
-//     , intensity_axis(SCALE_LOGARITHMIC)
-//     , frequency_axis(SCALE_LOGARITHMIC)
-//     , cancelled_(false)
-// {
-// }
-
-Palette::Palette(const QImage& img)
-{
-    assert(!img.isNull());
-    for (int x = 0; x < img.width(); ++x)
-        colors_.append(img.pixel(x, 0));
-}
-
-Palette::Palette()
-{
-    QVector<QRgb> colors;
-    for (int i = 0; i < 256; ++i)
-        colors.append(qRgb(i, i, i));
-    colors_ = colors;
-}
-
-int Palette::get_color(float val) const
-{
-    assert(val >= 0 && val <= 1);
-    if (indexable())
-        // returns the color index
-        return (colors_.size()-1)*val;
-    else
-        // returns the RGB value
-        return colors_[(colors_.size()-1)*val];
-}
-
-bool Palette::has_color(QRgb color) const
-{
-    return colors_.indexOf(color) != -1;
-}
-
-// ne moc efektivni
-float Palette::get_intensity(QRgb color) const
-{
-    int index = colors_.indexOf(color);
-    if (index == -1) // shouldn't happen
-        return 0;
-    return (float)index/(colors_.size()-1);
-}
-
-QImage Palette::make_canvas(int width, int height) const
-{
-    if (indexable())
-    {
-        QImage out(width, height, QImage::Format_Indexed8);
-        out.setColorTable(colors_);
-        out.fill(0);
-        return out;
-    }
-    else
-    {
-        QImage out(width, height, QImage::Format_RGB32);
-        out.fill(colors_[0]);
-        return out;
-    }
-}
-
-bool Palette::indexable() const
-{
-    return colors_.size() <= 256;
-}
-
-QPixmap Palette::preview(int width, int height) const
-{
-    QImage out = make_canvas(width, height);
-    for (int x = 0; x < width; ++x)
-        out.setPixel(x, 0, get_color((double)x/(width-1)));
-    int bytes = out.bytesPerLine();
-    for (int y = 1; y < height; ++y)
-        std::memcpy(out.scanLine(y), out.scanLine(0), bytes);
-    return QPixmap::fromImage(out);
-}
-
-int Palette::numColors() const
-{
-    return colors_.size();
-}
-
-// QString Spectrogram::serialized() const
-// {
-//     QString out;
-//     QTextStream desc(&out);
-//     desc.setRealNumberPrecision(4);
-//     desc.setRealNumberNotation(QTextStream::FixedNotation);
-//     desc << "Spectrogram:" << delimiter
-//         << bandwidth << delimiter
-//         << basefreq << delimiter
-//         << maxfreq << delimiter
-//         << overlap*100 << delimiter
-//         << pixpersec << delimiter
-//         << (int)window << delimiter
-//         << (int)intensity_axis << delimiter
-//         << (int)frequency_axis << delimiter
-//         ;
-//     //std::cout << "serialized: " << out.toStdString() << "\n";
-//     return out;
-// }
-
-// Cindy
 
 
 TracesProvider::TracesProvider(const QString& fileUrl,int nbChannels,int resolution,double samplingRate,int offset)
@@ -289,9 +104,8 @@ void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator
 {
     Array<dataType> data;
     // Cindy
-    // to store the spectrogram data
+    /* to store the spectrogram data */
     Array<dataType> specdata;
-
     // Cindy
 
     //When the bug in gcc will be corrected for the 64 bits, the c++ code will be use
@@ -343,7 +157,7 @@ void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator
         // transdata[i] = new double[nbSamples];
     // }
     double * ddata = new double[nbSamples * nbChannels];
-
+    real_vec soundSig;
     // to clean up
     // for(int i = 0; i < nbChannels; i++) {
     //     delete [] transdata[i];
@@ -521,6 +335,7 @@ void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator
                 // int column = nbValues - row*nbSamples;
                 // transdata[row][column] = static_cast<double>(retrieveData[i]) - static_cast<double>(offset);
                 ddata[i] = static_cast<double>(retrieveData[i]) - static_cast<double>(offset);
+                soundSig.push_back(ddata[i]);
                 // Cindy
             }
         } else {
@@ -534,6 +349,7 @@ void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator
                 // int column = nbValues - row*nbSamples;
                 // transdata[row][column] = static_cast<double>(retrieveData[i]);
                 ddata[i] = static_cast<double>(retrieveData[i]) - static_cast<double>(offset);
+                soundSig.push_back(ddata[i]);
                 // Cindy
             }
         }
@@ -580,6 +396,7 @@ void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator
                 // int column = nbValues - row*nbSamples;
                 // transdata[row][column] = static_cast<double>(retrieveData[i]) - static_cast<double>(offset);
                 ddata[i] = static_cast<double>(retrieveData[i]) - static_cast<double>(offset);
+                soundSig.push_back(ddata[i]);
                 // Cindy
             }
         }
@@ -594,6 +411,7 @@ void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator
                 // int column = nbValues - row*nbSamples;
                 // transdata[row][column] = static_cast<double>(retrieveData[i]);
                 ddata[i] = static_cast<double>(retrieveData[i]) - static_cast<double>(offset);
+                soundSig.push_back(ddata[i]);
                 // Cindy
             }
         }
@@ -604,9 +422,7 @@ void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator
 
 
     // Cindy
-
-
-    // mfft *mtmh;
+    mfft *mtmh;
     // int npoints = 17590;
     int N = 256;
     int Np = 201;
@@ -614,32 +430,31 @@ void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator
     int step = 10;
     int k = 6;
     double tm = 6.0;
-    // double psd[N];
+    double psd[N];
     // double *specgram;
-    // double sigpow;
+    double sigpow;
     // int row = sizeof transdata / sizeof transdata[0];
     // const int l = (npoints - Np + 1) / step;
 
     // int npoints = (endTime - startTime) * samplingRate;
     int npoints = static_cast<int>(samplingRate);
+    // double sr = static_cast<double>(samplingRate);
     // int npoints = sizeof(ddata)/sizeof(*ddata);
-    // printf("%d\n", npoints);
-    // printf("%ld, %ld\n", startTime, endTime);
-    // printf("%lf\n",samplingRate );
-    printf("%d\n",nbChannels );
-    printf("%ld\n",nbSamples );
 
     // printf("samplingRate = %d, nbChannels= %d, nbSamples= %d, startTime = %ld, endTime = %ld\n",samplingRate, nbChannels, nbSamples, startTime,endTime);
-
-    mfft *mtmh;
+    
+    // std::vector<double> sigals;
+    // std::vector<std::vector<double> > image_data;
+    // Spectrogram* spectrogram = new Spectrogram(this);
+    // mfft *mtmh;
     mtmh = mtm_init_dpss(N, N, NW, (int)(NW*2-1));
     printf("* MTM initialized\n");
     // double * psd = new double[N];
-    // mfft * mtmh;
-    double sigpow;
+    // // mfft * mtmh;
+    // double sigpow;
     sigpow = mtfft(mtmh, ddata+8300, N);
     printf("mtfft performed\n");
-    double *psd = new double[N];
+    // double *psd = new double[N];
     mtpower(mtmh, psd, sigpow);
     printf("mtpower performed\n");
     // free(psd);
@@ -651,69 +466,11 @@ void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator
     // printf("mtm_spec start\n");
     mtm_spec(mtmh, specgram, ddata, npoints, step, 1);
     printf("mtm_spec done\n");
+    // Cindy
 
-    // // mtmh = mtm_init_herm(N, Np, k, tm);
-    // // tfr_spec(mtmh, specgram, sig, npoints, -1, step, 0.01, 5, 0, NULL);
-    // // printf("tfr_spec done\n");
-    // Array<dataType> res;
-    // res.setSize(nbSamples,nbChannels);
-    // for ( int i = 0; i < sizeof(specgram)/sizeof(double); i++) {
-    //     res[i] = specgram[i];
-    // }
-    std::vector<std::vector<double> > image_data;
-    // Spectrogram* spectrogram = new Spectrogram(this);
-    // for (int i = 0; i < l*(N/2+1); i++) {
-    //     image_data.push_back(*(specgram+i));
-    // }
-    // printf("l= %d, N/2+1= %d\n",l,N/2+1);
 
-    // printf("vector initialied\n");
-    for (int i = 0; i < l; i++) {
-        std::vector<double> tmp;
-        for (int j = 0; j < N/2+1; j++) {
-            tmp.push_back(*(specgram+i*(N/2+1)+j));
-            // printf("%d %d\n",i,j);
-        }
-        // printf("%d ",i);
-        image_data.push_back(tmp);
-    }
-
-    normalize_image(image_data);
-    printf("vector normalized\n");
-    const int height = l;
-    const int width = (N/2+1);
-    std::cout << "image size: " << width <<" x "<<height<<"\n";
-    QImage out = palette.make_canvas(width, height);
-    for (size_t y = 0; y < height; ++y)
-    {
-        // assert(specgram[y].size() == width);
-        for (size_t x = 0; x < width; ++x)
-        {
-            // double intensity = calc_intensity(*(specgram+y*width+x), SCALE_LINEAR);
-            double intensity = calc_intensity(image_data[y][x], SCALE_LINEAR);
-            intensity = brightness_correction(intensity, BRIGHT_SQRT);
-            out.setPixel(x, (height-1-y), palette.get_color(intensity));
-        }
-    }
-    printf("image data assigned\n");
-    // out.Spectrogram::setText("Spectrogram", serialized());
-    out.save("spectrotest.png");
-    // if (out.save("spectrotest", "PNG")) {
-    //     printf("spect img saved.");
-    // } else {
-    //     printf("spect img mot saved.");
-    // }
-     
-    printf("image saved.");
-
+    // Send the information to the receiver.
     emit dataReady(data,initiator);
-    // Cindy
-
-
-    // Cindy
-
-    //Send the information to the receiver.
-    // emit dataReady(data,initiator);
 }
 
 void TracesProvider::computeRecordingLength(){

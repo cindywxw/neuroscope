@@ -31,9 +31,7 @@
 #include <QPrinter>
 
 #include <QList>
-// Cindy
-#include <QRadioButton>
-// Cindy
+
 // application specific includes
 #include "baseframe.h"
 #include "positionview.h"
@@ -801,8 +799,6 @@ private:
   * the constructor.
   */
     QDockWidget* freqDock;
-    // check to show spectrogram
-    // QRadioButton *button = new QRadioButton("Show the spectrogam", this);
     //Cindy
 
     /**True if the traces are displayed on multiple columns, false otherwise.*/

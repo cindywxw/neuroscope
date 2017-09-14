@@ -55,56 +55,46 @@ extern "C" {
 #include <QPixmap>
 #include <QSize>
 
-class Palette
-{
-    public:
-        /// Default constructor -- 8-bit grayscale palette.
-        Palette();
-        /// Creates a palette from an image.
-        /** 
-         * This constructor takes an image and fills the palette with colors
-         * from the first row of an image.  \param img The image used to
-         * generate the palette.
-         */
-        Palette(const QImage& img);
-        //const QVector<QRgb>& colors() const;
-        /// Mapping of intensity values from <0,1> to an index or RGB value.
-        /** 
-         * \param val A float where 0 <= val <= 1
-         * \return Index of the color for an indexed palette or RGB value.
-         */
-        int get_color(float val) const;
-        /// Inverse mapping of color values to intensity, used for spectrogram synthesis.
-        /** \return Corresponding intensity, a value from <0,1>.  */
-        float get_intensity(QRgb color) const;
-        /// Returns true if the palette contains the given color, false otherwise.
-        bool has_color(QRgb color) const;
-        /// Creates a QImage with an appropriate color mode and dimensions.
-        /** The resulting QImage will have the specified dimensions and color
-         * mode depending on the number of colors in the palette.  For 256 or
-         * less colors, it will be indexed, otherwise RGB.
-         */
-        QImage make_canvas(int width, int height) const;
-        /// Used to determine if the palette is indexed or RGB.
-        /** \return \c true if the palette is indexed, otherwise \c false.*/
-        bool indexable() const;
-        /// Generate a preview of the palette suitable for display in a widget.
-        QPixmap preview(int width, int height) const;
-        /// Returns the number of colors in the palette.
-        int numColors() const;
-    private:
-        QVector<QRgb> colors_;
-};
-
-enum Window 
-{
-    WINDOW_HANN, /**< See http://en.wikipedia.org/wiki/Hann_window */
-    WINDOW_BLACKMAN, /**< See http://en.wikipedia.org/wiki/Window_function#Blackman_windows */
-    WINDOW_RECTANGULAR, /**< Doesn't do anything. */
-    WINDOW_TRIANGULAR /**< http://en.wikipedia.org/wiki/Triangular_window#Triangular_window_.28non-zero_end-points.29 */
-};
-enum AxisScale {SCALE_LINEAR, SCALE_LOGARITHMIC};
-enum BrightCorrection {BRIGHT_NONE, BRIGHT_SQRT};
+// class Palette
+// {
+//     public:
+//         /// Default constructor -- 8-bit grayscale palette.
+//         Palette();
+//         /// Creates a palette from an image.
+//         /** 
+//          * This constructor takes an image and fills the palette with colors
+//          * from the first row of an image.  \param img The image used to
+//          * generate the palette.
+//          */
+//         Palette(const QImage& img);
+//         //const QVector<QRgb>& colors() const;
+//         /// Mapping of intensity values from <0,1> to an index or RGB value.
+//         /** 
+//          * \param val A float where 0 <= val <= 1
+//          * \return Index of the color for an indexed palette or RGB value.
+//          */
+//         int get_color(float val) const;
+//         /// Inverse mapping of color values to intensity, used for spectrogram synthesis.
+//         /** \return Corresponding intensity, a value from <0,1>.  */
+//         float get_intensity(QRgb color) const;
+//         /// Returns true if the palette contains the given color, false otherwise.
+//         bool has_color(QRgb color) const;
+//         /// Creates a QImage with an appropriate color mode and dimensions.
+//         /** The resulting QImage will have the specified dimensions and color
+//          * mode depending on the number of colors in the palette.  For 256 or
+//          * less colors, it will be indexed, otherwise RGB.
+//          */
+//         QImage make_canvas(int width, int height) const;
+//         /// Used to determine if the palette is indexed or RGB.
+//         /** \return \c true if the palette is indexed, otherwise \c false.*/
+//         bool indexable() const;
+//         /// Generate a preview of the palette suitable for display in a widget.
+//         QPixmap preview(int width, int height) const;
+//         /// Returns the number of colors in the palette.
+//         int numColors() const;
+//     private:
+//         QVector<QRgb> colors_;
+// };
 
 
 // class Spectrogram : public QObject
@@ -259,7 +249,7 @@ public:
     long getTotalNbSamples();
 
     // Cindy
-    Palette palette;
+    // Palette palette;
     // Cindy
 
 

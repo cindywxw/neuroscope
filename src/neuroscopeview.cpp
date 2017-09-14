@@ -16,23 +16,12 @@
  ***************************************************************************/
 
 
-// Cindy
-// #ifdef __cplusplus
-// extern "C" {
-// #include <stdio.h>
-// #include <math.h>
-// }
-// #endif
-// #include <cstdio>
+
 #include <cstdlib>
 #include <cmath>
 
-// #include "tfr.h"
-// Cindy
-
 // include files for Qt
 #include <QPainter>
-
 
 #include <QList>
 #include <QPixmap>
@@ -44,12 +33,6 @@
 #include "neuroscope.h"
 #include "tracewidget.h"
 
-// Cindy
-// using namespace std;
-# include "plot.h"
-#include <qtoolbar.h>
-#include <qtoolbutton.h>
-// CIndy
 
 class EventData;
 
@@ -162,106 +145,87 @@ NeuroscopeView::NeuroscopeView(NeuroscopeApp& mainWindow, const QString &label, 
     
     connect(&globalEventProvider,SIGNAL(getCurrentEventInformation(long,long,QObject*)),traceWidget,SLOT(getCurrentEventInformation(long,long,QObject*)));
 
-    // if (NeuroscopeApp::showSpect == 1 ) {
-    // Cindy
-    // Add additional freqDock below mainDock
-    freqDock = new QDockWidget(tr("TFR Spectrogram"));
-    freqDock->setFeatures(QDockWidget::NoDockWidgetFeatures);
-    addDockWidget(Qt::RightDockWidgetArea,freqDock);
-
-    // traceWidget = new TraceWidget(startTime,duration,greyScale,tracesProvider,multiColumns,verticalLines,raster,
-    //                               waveforms,labelsDisplay,*shownChannels,unitGain,acquisitionGain,channelColors,groupsChannels,channelsGroups,autocenterChannels,
-    //                               channelOffsets,gains,skippedChannels,rasterHeight,QImage(backgroundImagePath),freqDock,"traces",backgroundColor,statusBar,5);
-    //  /// Added by M.Zugaro to enable automatic forward paging
-    // connect(traceWidget,SIGNAL(stopped()),this,SLOT(traceWidgetStopped()));
-
-    // freqDock->setWidget(traceWidget);
-    // freqDock->setFocusPolicy(Qt::NoFocus);
-
-    // //Set Connection(s) common to all widgets.
-    // connect(this,SIGNAL(updateContents()),traceWidget,SLOT(updateContents()));
-    // connect(this,SIGNAL(changeBackgroundColor(QColor)),traceWidget, SLOT(changeBackgroundColor(QColor)));
-    // connect(this,SIGNAL(greyScale(bool)),traceWidget, SLOT(setGreyScale(bool)));
-    // connect(traceWidget,SIGNAL(channelsSelected(QList<int>)),this, SLOT(slotChannelsSelected(QList<int>)));
-    // connect(this,SIGNAL(modeToSet(BaseFrame::Mode,bool)),traceWidget,SLOT(setMode(BaseFrame::Mode,bool)));
-    // connect(this,SIGNAL(multiColumnsDisplay(bool)),traceWidget,SLOT(setMultiColumns(bool)));
-    // connect(this,SIGNAL(clusterVerticalLinesDisplay(bool)),traceWidget,SLOT(setClusterVerticalLines(bool)));
-    // connect(this,SIGNAL(clusterRasterDisplay(bool)),traceWidget,SLOT(setClusterRaster(bool)));
-    // connect(this,SIGNAL(clusterWaveformsDisplay(bool)),traceWidget,SLOT(setClusterWaveforms(bool)));
-    // connect(this,SIGNAL(showChannels(QList<int>)),traceWidget,SLOT(showChannels(QList<int>)));
-    // connect(this,SIGNAL(channelColorUpdate(int,bool)),traceWidget,SLOT(channelColorUpdate(int,bool)));
-    // connect(this,SIGNAL(groupColorUpdate(int,bool)),traceWidget,SLOT(groupColorUpdate(int,bool)));
-    // connect(this,SIGNAL(increaseAllAmplitude()),traceWidget,SLOT(increaseAllChannelsAmplitude()));
-    // connect(this,SIGNAL(decreaseAllAmplitude()),traceWidget,SLOT(decreaseAllChannelsAmplitude()));
-    // connect(this,SIGNAL(increaseAmplitude(QList<int>)),traceWidget,SLOT(increaseSelectedChannelsAmplitude(QList<int>)));
-    // connect(this,SIGNAL(decreaseAmplitude(QList<int>)),traceWidget,SLOT(decreaseSelectedChannelsAmplitude(QList<int>)));
-    // connect(this,SIGNAL(updateGains(int,int)),traceWidget,SLOT(setGains(int,int)));
-    // connect(this,SIGNAL(updateDrawing()),traceWidget, SLOT(updateDrawing()));
-    // connect(this,SIGNAL(groupsHaveBeenModified(bool)),traceWidget, SLOT(groupsModified(bool)));
-    // connect(this,SIGNAL(channelsToBeSelected(QList<int>)),traceWidget,SLOT(selectChannels(QList<int>)));
-    // connect(this,SIGNAL(resetChannelOffsets(QMap<int,int>)),traceWidget,SLOT(resetOffsets(QMap<int,int>)));
-    // connect(this,SIGNAL(resetChannelGains(QList<int>)),traceWidget,SLOT(resetGains(QList<int>)));
-    // connect(this,SIGNAL(drawTraces()),traceWidget,SLOT(drawTraces()));
-    // connect(this,SIGNAL(reset()),traceWidget,SLOT(reset()));
-    // connect(traceWidget,SIGNAL(updateStartAndDuration(long,long)),this, SLOT(setStartAndDuration(long,long)));
-    // connect(this,SIGNAL(autocenterChannelsChanged(bool)),traceWidget, SLOT(setAutocenterChannels(bool)));
-    // connect(this,SIGNAL(showLabels(bool)),traceWidget, SLOT(showLabels(bool)));
-    // connect(this,SIGNAL(displayCalibration(bool,bool)),traceWidget, SLOT(showCalibration(bool,bool)));
-    // connect(this,SIGNAL(newSamplingRate(qlonglong)),traceWidget,SLOT(samplingRateModified(qlonglong)));
-    // connect(this,SIGNAL(newClusterProvider(ClustersProvider*,QString,ItemColors*,bool,QList<int>&,QMap<int,QList<int> >*,QMap<int,int>*,int,int,QList<int>)),traceWidget,
-    //         SLOT(addClusterProvider(ClustersProvider*,QString,ItemColors*,bool,QList<int>&,QMap<int,QList<int> >*,QMap<int,int>*,int,int,QList<int>)));
-    // connect(this,SIGNAL(clusterProviderRemoved(QString,bool)),traceWidget,SLOT(removeClusterProvider(QString,bool)));
-    // connect(this,SIGNAL(showClusters(QString,QList<int>)),traceWidget,SLOT(showClusters(QString,QList<int>)));
-    // connect(this,SIGNAL(clusterColorUpdated(QColor,QString,int,bool)),traceWidget,SLOT(clusterColorUpdate(QColor,QString,int,bool)));
-    // connect(this,SIGNAL(print(QPainter&,int,int,QString,bool)),traceWidget,SLOT(print(QPainter&,int,int,QString,bool)));
-    // connect(this,SIGNAL(newEventProvider(EventsProvider*,QString,ItemColors*,bool,QList<int>&,QList<int>)),traceWidget,
-    //         SLOT(addEventProvider(EventsProvider*,QString,ItemColors*,bool,QList<int>&,QList<int>)));
-    // connect(this,SIGNAL(eventProviderRemoved(QString,bool,bool)),traceWidget,SLOT(removeEventProvider(QString,bool)));
-    // connect(this,SIGNAL(showEvents(QString,QList<int>&)),traceWidget,SLOT(showEvents(QString,QList<int>&)));
-    // connect(this,SIGNAL(eventColorUpdated(QColor,QString,int,bool)),traceWidget,SLOT(eventColorUpdate(QColor,QString,int,bool)));
-    // connect(this,SIGNAL(nextEvent()),traceWidget,SLOT(showNextEvent()));
-    // connect(this,SIGNAL(previousEvent()),traceWidget,SLOT(showPreviousEvent()));
-    // connect(traceWidget,SIGNAL(eventModified(QString,int,double,double)),this, SLOT(slotEventModified(QString,int,double,double)));
-    // connect(this,SIGNAL(updateEvents(bool,QString,double,double)),traceWidget,SLOT(updateEvents(bool,QString,double,double)));
-    // connect(this,SIGNAL(eventToRemove()),traceWidget,SLOT(removeEvent()));
-    // connect(traceWidget,SIGNAL(eventRemoved(QString,int,double)),this, SLOT(slotEventRemoved(QString,int,double)));
-    // connect(this,SIGNAL(updateEvents(bool,QString,double)),traceWidget,SLOT(updateEvents(bool,QString,double)));
-    // connect(this,SIGNAL(newEventProperties(QString,QString)),traceWidget,SLOT(eventToAddProperties(QString,QString)));
-    // connect(traceWidget,SIGNAL(eventAdded(QString,QString,double)),this, SLOT(slotEventAdded(QString,QString,double)));
-    // connect(this,SIGNAL(updateEvents(QString,QList<int>&,bool)),traceWidget,SLOT(updateEvents(QString,QList<int>&,bool)));
-    // connect(this,SIGNAL(nextCluster()),traceWidget,SLOT(showNextCluster()));
-    // connect(this,SIGNAL(previousCluster()),traceWidget,SLOT(showPreviousCluster()));
-    // connect(this,SIGNAL(waveformInformationUpdated(int,int,bool)),traceWidget,SLOT(updateWaveformInformation(int,int,bool)));
-    // connect(this,SIGNAL(clusterProviderUpdated(bool)),traceWidget,SLOT(updateClusterData(bool)));
-    // connect(this,SIGNAL(noneBrowsingClusterListUpdated(QString,QList<int>)),traceWidget,SLOT(updateNoneBrowsingClusterList(QString,QList<int>)));
-    // connect(this,SIGNAL(noneBrowsingEventListUpdated(QString,QList<int>)),traceWidget,SLOT(updateNoneBrowsingEventList(QString,QList<int>)));
-    // connect(this,SIGNAL(skipStatusChanged(QList<int>)),traceWidget,SLOT(updateSkipStatus(QList<int>)));
-    // connect(this,SIGNAL(decreaseTheRasterHeight()),traceWidget,SLOT(decreaseRasterHeight()));
-    // connect(this,SIGNAL(increaseTheRasterHeight()),traceWidget,SLOT(increaseRasterHeight()));
-    // connect(this,SIGNAL(traceBackgroundImageUpdate(QImage,bool)),traceWidget,SLOT(traceBackgroundImageUpdate(QImage,bool)));
     
-    // connect(&globalEventProvider,SIGNAL(getCurrentEventInformation(long,long,QObject*)),traceWsFidget,SLOT(getCurrentEventInformation(long,long,QObject*)));
-    // }
+    // Cindy
+    // Add additional freqDock below mainDock when spectrogram button is checked
+    if (mainWindow.showSpect == 1 ) {
+        freqDock = new QDockWidget(tr("TFR Spectrogram"));
+        freqDock->setFeatures(QDockWidget::NoDockWidgetFeatures);
+        addDockWidget(Qt::RightDockWidgetArea,freqDock);
 
-    printf("try to plot" );
-    Plot *d_plot;
-    d_plot = new Plot( this );
-    printf("try to add toolbar" );
-    QToolBar *toolBar = new QToolBar( this );
+        traceWidget = new TraceWidget(startTime,duration,greyScale,tracesProvider,multiColumns,verticalLines,raster,
+                                      waveforms,labelsDisplay,*shownChannels,unitGain,acquisitionGain,channelColors,groupsChannels,channelsGroups,autocenterChannels,
+                                      channelOffsets,gains,skippedChannels,rasterHeight,QImage(backgroundImagePath),freqDock,"traces",backgroundColor,statusBar,5);
+         /// Added by M.Zugaro to enable automatic forward paging
+        connect(traceWidget,SIGNAL(stopped()),this,SLOT(traceWidgetStopped()));
 
-    QToolButton *btnSpectrogram = new QToolButton( toolBar );
-    btnSpectrogram->setText( "Spectrogram" );
-    btnSpectrogram->setCheckable( true );
-    btnSpectrogram->setToolButtonStyle( Qt::ToolButtonTextUnderIcon );
-    toolBar->addWidget( btnSpectrogram );
-    connect( btnSpectrogram, SIGNAL( toggled( bool ) ), d_plot, SLOT( showSpectrogram( bool ) ) );
-    printf("added toolbar" );
-    // QToolButton *btnContour = new QToolButton( toolBar );
-    // btnContour->setText( "Contour" );
-    // btnContour->setCheckable( true );
-    // btnContour->setToolButtonStyle( Qt::ToolButtonTextUnderIcon );
-    // toolBar->addWidget( btnContour );
-    // connect( btnContour, SIGNAL( toggled( bool ) ), d_plot, SLOT( showContour( bool ) ) );
+        freqDock->setWidget(traceWidget);
+        freqDock->setFocusPolicy(Qt::NoFocus);
+
+        //Set Connection(s) common to all widgets.
+        connect(this,SIGNAL(updateContents()),traceWidget,SLOT(updateContents()));
+        connect(this,SIGNAL(changeBackgroundColor(QColor)),traceWidget, SLOT(changeBackgroundColor(QColor)));
+        connect(this,SIGNAL(greyScale(bool)),traceWidget, SLOT(setGreyScale(bool)));
+        connect(traceWidget,SIGNAL(channelsSelected(QList<int>)),this, SLOT(slotChannelsSelected(QList<int>)));
+        connect(this,SIGNAL(modeToSet(BaseFrame::Mode,bool)),traceWidget,SLOT(setMode(BaseFrame::Mode,bool)));
+        connect(this,SIGNAL(multiColumnsDisplay(bool)),traceWidget,SLOT(setMultiColumns(bool)));
+        connect(this,SIGNAL(clusterVerticalLinesDisplay(bool)),traceWidget,SLOT(setClusterVerticalLines(bool)));
+        connect(this,SIGNAL(clusterRasterDisplay(bool)),traceWidget,SLOT(setClusterRaster(bool)));
+        connect(this,SIGNAL(clusterWaveformsDisplay(bool)),traceWidget,SLOT(setClusterWaveforms(bool)));
+        connect(this,SIGNAL(showChannels(QList<int>)),traceWidget,SLOT(showChannels(QList<int>)));
+        connect(this,SIGNAL(channelColorUpdate(int,bool)),traceWidget,SLOT(channelColorUpdate(int,bool)));
+        connect(this,SIGNAL(groupColorUpdate(int,bool)),traceWidget,SLOT(groupColorUpdate(int,bool)));
+        connect(this,SIGNAL(increaseAllAmplitude()),traceWidget,SLOT(increaseAllChannelsAmplitude()));
+        connect(this,SIGNAL(decreaseAllAmplitude()),traceWidget,SLOT(decreaseAllChannelsAmplitude()));
+        connect(this,SIGNAL(increaseAmplitude(QList<int>)),traceWidget,SLOT(increaseSelectedChannelsAmplitude(QList<int>)));
+        connect(this,SIGNAL(decreaseAmplitude(QList<int>)),traceWidget,SLOT(decreaseSelectedChannelsAmplitude(QList<int>)));
+        connect(this,SIGNAL(updateGains(int,int)),traceWidget,SLOT(setGains(int,int)));
+        connect(this,SIGNAL(updateDrawing()),traceWidget, SLOT(updateDrawing()));
+        connect(this,SIGNAL(groupsHaveBeenModified(bool)),traceWidget, SLOT(groupsModified(bool)));
+        connect(this,SIGNAL(channelsToBeSelected(QList<int>)),traceWidget,SLOT(selectChannels(QList<int>)));
+        connect(this,SIGNAL(resetChannelOffsets(QMap<int,int>)),traceWidget,SLOT(resetOffsets(QMap<int,int>)));
+        connect(this,SIGNAL(resetChannelGains(QList<int>)),traceWidget,SLOT(resetGains(QList<int>)));
+        connect(this,SIGNAL(drawTraces()),traceWidget,SLOT(drawTraces()));
+        connect(this,SIGNAL(reset()),traceWidget,SLOT(reset()));
+        connect(traceWidget,SIGNAL(updateStartAndDuration(long,long)),this, SLOT(setStartAndDuration(long,long)));
+        connect(this,SIGNAL(autocenterChannelsChanged(bool)),traceWidget, SLOT(setAutocenterChannels(bool)));
+        connect(this,SIGNAL(showLabels(bool)),traceWidget, SLOT(showLabels(bool)));
+        connect(this,SIGNAL(displayCalibration(bool,bool)),traceWidget, SLOT(showCalibration(bool,bool)));
+        connect(this,SIGNAL(newSamplingRate(qlonglong)),traceWidget,SLOT(samplingRateModified(qlonglong)));
+        connect(this,SIGNAL(newClusterProvider(ClustersProvider*,QString,ItemColors*,bool,QList<int>&,QMap<int,QList<int> >*,QMap<int,int>*,int,int,QList<int>)),traceWidget,
+                SLOT(addClusterProvider(ClustersProvider*,QString,ItemColors*,bool,QList<int>&,QMap<int,QList<int> >*,QMap<int,int>*,int,int,QList<int>)));
+        connect(this,SIGNAL(clusterProviderRemoved(QString,bool)),traceWidget,SLOT(removeClusterProvider(QString,bool)));
+        connect(this,SIGNAL(showClusters(QString,QList<int>)),traceWidget,SLOT(showClusters(QString,QList<int>)));
+        connect(this,SIGNAL(clusterColorUpdated(QColor,QString,int,bool)),traceWidget,SLOT(clusterColorUpdate(QColor,QString,int,bool)));
+        connect(this,SIGNAL(print(QPainter&,int,int,QString,bool)),traceWidget,SLOT(print(QPainter&,int,int,QString,bool)));
+        connect(this,SIGNAL(newEventProvider(EventsProvider*,QString,ItemColors*,bool,QList<int>&,QList<int>)),traceWidget,
+                SLOT(addEventProvider(EventsProvider*,QString,ItemColors*,bool,QList<int>&,QList<int>)));
+        connect(this,SIGNAL(eventProviderRemoved(QString,bool,bool)),traceWidget,SLOT(removeEventProvider(QString,bool)));
+        connect(this,SIGNAL(showEvents(QString,QList<int>&)),traceWidget,SLOT(showEvents(QString,QList<int>&)));
+        connect(this,SIGNAL(eventColorUpdated(QColor,QString,int,bool)),traceWidget,SLOT(eventColorUpdate(QColor,QString,int,bool)));
+        connect(this,SIGNAL(nextEvent()),traceWidget,SLOT(showNextEvent()));
+        connect(this,SIGNAL(previousEvent()),traceWidget,SLOT(showPreviousEvent()));
+        connect(traceWidget,SIGNAL(eventModified(QString,int,double,double)),this, SLOT(slotEventModified(QString,int,double,double)));
+        connect(this,SIGNAL(updateEvents(bool,QString,double,double)),traceWidget,SLOT(updateEvents(bool,QString,double,double)));
+        connect(this,SIGNAL(eventToRemove()),traceWidget,SLOT(removeEvent()));
+        connect(traceWidget,SIGNAL(eventRemoved(QString,int,double)),this, SLOT(slotEventRemoved(QString,int,double)));
+        connect(this,SIGNAL(updateEvents(bool,QString,double)),traceWidget,SLOT(updateEvents(bool,QString,double)));
+        connect(this,SIGNAL(newEventProperties(QString,QString)),traceWidget,SLOT(eventToAddProperties(QString,QString)));
+        connect(traceWidget,SIGNAL(eventAdded(QString,QString,double)),this, SLOT(slotEventAdded(QString,QString,double)));
+        connect(this,SIGNAL(updateEvents(QString,QList<int>&,bool)),traceWidget,SLOT(updateEvents(QString,QList<int>&,bool)));
+        connect(this,SIGNAL(nextCluster()),traceWidget,SLOT(showNextCluster()));
+        connect(this,SIGNAL(previousCluster()),traceWidget,SLOT(showPreviousCluster()));
+        connect(this,SIGNAL(waveformInformationUpdated(int,int,bool)),traceWidget,SLOT(updateWaveformInformation(int,int,bool)));
+        connect(this,SIGNAL(clusterProviderUpdated(bool)),traceWidget,SLOT(updateClusterData(bool)));
+        connect(this,SIGNAL(noneBrowsingClusterListUpdated(QString,QList<int>)),traceWidget,SLOT(updateNoneBrowsingClusterList(QString,QList<int>)));
+        connect(this,SIGNAL(noneBrowsingEventListUpdated(QString,QList<int>)),traceWidget,SLOT(updateNoneBrowsingEventList(QString,QList<int>)));
+        connect(this,SIGNAL(skipStatusChanged(QList<int>)),traceWidget,SLOT(updateSkipStatus(QList<int>)));
+        connect(this,SIGNAL(decreaseTheRasterHeight()),traceWidget,SLOT(decreaseRasterHeight()));
+        connect(this,SIGNAL(increaseTheRasterHeight()),traceWidget,SLOT(increaseRasterHeight()));
+        connect(this,SIGNAL(traceBackgroundImageUpdate(QImage,bool)),traceWidget,SLOT(traceBackgroundImageUpdate(QImage,bool)));
+        
+        connect(&globalEventProvider,SIGNAL(getCurrentEventInformation(long,long,QObject*)),traceWidget,SLOT(getCurrentEventInformation(long,long,QObject*)));
+    }
     //Cindy
 }
 
@@ -270,12 +234,6 @@ NeuroscopeView::~NeuroscopeView()
     delete shownChannels;
 }
 
-
-// Cindy
-// void NeuroscopeView::spectrogram_click {
-
-// }
-// Cindy
 
 void NeuroscopeView::print(QPrinter* printer,const QString& filePath,bool whiteBackground)
 {
@@ -699,11 +657,3 @@ void NeuroscopeView::removeEvent(){
 void NeuroscopeView::slotEventAdded(const QString &providerName, const QString &addedEventDescription,double time){
     emit eventAdded(providerName,addedEventDescription,time);
 }
-
-
-// Cindy
-// #ifdef __cplusplus
-// }
-// #endif
-
-// #endif

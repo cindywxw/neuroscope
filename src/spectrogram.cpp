@@ -220,7 +220,7 @@ Spectrogram::Spectrogram(QObject* parent) // defaults
     : QObject(parent)
     , bandwidth(100)
     , basefreq(55)
-    , maxfreq(22050)
+    , maxfreq(5000)
     , overlap(0.8)
     , pixpersec(100)
     , window(WINDOW_HANN)
@@ -247,6 +247,7 @@ QImage Spectrogram::to_image(real_vec& signal, int samplerate) const
     const int bands = filterbank->num_bands_est(maxfreq);
     const int top_index = maxfreq*filterscale;
     // maxfreq has to be at most nyquist
+    printf("%d %d\n", top_index,(int)spectrum.size());
     assert(top_index <= (int)spectrum.size());
 
     std::vector<real_vec> image_data;

@@ -40,10 +40,6 @@
 #include <QStatusBar>
 #include <QToolBar>
 
-// Cindy
-#include <QRadioButton>
-// Cindy
-
 #include <QProcess>
 #include <QSplitter>
 
@@ -54,9 +50,7 @@
 #include "prefdialog.h"
 #include "configuration.h"  // class Configuration
 #include "propertiesdialog.h"
-// Cindy
-// #include "spectrogramdialog.h"
-// Cindy
+
 #include "traceview.h"
 #include "itempalette.h"
 #include "eventsprovider.h"
@@ -80,9 +74,6 @@ NeuroscopeApp::NeuroscopeApp()
     ,eventsModified(false)
     ,initialOffsetDefault(0)
     ,propertiesDialog(0L)
-    // Cindy
-    /*,spectrogramDialog(0L)*/
-    // Cindy
     ,select(false)
     ,initialTimeWindow(0)
     ,undoRedoInprocess(false)
@@ -92,7 +83,7 @@ NeuroscopeApp::NeuroscopeApp()
     initView();
 
     // Cindy
-    // showSpect = 0;
+    showSpect = 1;
     // Cindy
 
     //Apply the user settings.
@@ -935,9 +926,6 @@ void NeuroscopeApp::initDisplay(QList<int>* channelsToDisplay,bool autocenterCha
     //Create the mainDock (first view)
     if(tabLabel.isEmpty())
         tabLabel = tr("Field Potentials Display");
-    // Cindy
-    // radButton = new QRadioButton("Show the spectrogram", this);
-    // Cindy
 
     isInit = false; //now a change in a spine box or the lineedit will trigger an update of the display
 
@@ -967,41 +955,6 @@ void NeuroscopeApp::initDisplay(QList<int>* channelsToDisplay,bool autocenterCha
 
 
     tabsParent->addDockArea(view,tabLabel);
-
-    // Cindy
-    //Create the freqDock (first view)
-    
-    // tabLabel = tr("Sounds");
-
-    // isInit = false; //now a change in a spine box or the lineedit will trigger an update of the display
-
-    // view = new NeuroscopeView(*this,tabLabel,startTime,duration,backgroundColor,Qt::WA_DeleteOnClose,statusBar(),channelsToDisplay,greyScale->isChecked(),
-    //                                           doc->tracesDataProvider(),displayMode->isChecked(),clusterVerticalLines->isChecked(),
-    //                                           clusterRaster->isChecked(),clusterWaveforms->isChecked(),showHideLabels->isChecked(),doc->getGain(),doc->getAcquisitionGain(),
-    //                                           doc->channelColors(),doc->getDisplayGroupsChannels(),doc->getDisplayChannelsGroups(),autocenterChannels,
-    //                                           offsets,channelGains,selectedChannels,skipStatus,rasterHeight,doc->getTraceBackgroundImage(),freqDock,"TracesDisplay");
-
-    // view->installEventFilter(this);
-
-    // connect(view,SIGNAL(channelsSelected(QList<int>)),this, SLOT(slotSelectChannelsInPalette(QList<int>)));
-    // connect(view,SIGNAL(eventModified(QString,int,double,double)),this, SLOT(slotEventModified(QString,int,double,double)));
-    // connect(view,SIGNAL(eventRemoved(QString,int,double)),this, SLOT(slotEventRemoved(QString,int,double)));
-    // connect(view,SIGNAL(eventAdded(QString,QString,double)),this, SLOT(slotEventAdded(QString,QString,double)));
-    // connect(view,SIGNAL(positionViewClosed()),this, SLOT(positionViewClosed()));
-     
-    //  /// Added by M.Zugaro to enable automatic forward paging
-    //  connect(view,SIGNAL(stopped()),this,SLOT(neuroscopeViewStopped()));
-
-    // //Keep track of the number of displays
-    // displayCount ++;
-
-    // //Update the document's list of view
-    // doc->addView(view);
-    // freqDock = view;
-
-
-    // tabsParent->addDockArea(view,tabLabel);
-    // Cindy
 
 
     //Initialize and dock the displayPanel
@@ -1630,8 +1583,9 @@ void NeuroscopeApp::showSpectrogram()
     slotStatusMsg(tr("Spectrogram..."));
     // if(spectrogramDialog == 0L)
     //     spectrogramDialog = new spectrogramDialog(this);
-    // if (showSpect == 1) showSpect = 0;
-    // else showSpect = 1;
+    if (showSpect == 1) showSpect = 0;
+    else showSpect = 1;
+    // std::cout << showSpect << std::endl;
 
     //Update the content of the view contains in active display.
     activeView()->updateViewContents();

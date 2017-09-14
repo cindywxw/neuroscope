@@ -12,9 +12,9 @@
 #include <QThread>
 #include <complex>
 #include <memory>
-#include "soundfile.hpp"
+// #include "soundfile.hpp"
 #include "fft.hpp"
-
+#include "types.hpp"
 #include <QVector>
 #include <QRgb>
 
